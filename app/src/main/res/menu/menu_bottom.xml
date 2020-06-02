@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Create by platform eight on 2019. 10. 29.
+  ~ Copyright (c) 2019. platform eight. All rights reserved.
+  -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/homeItem"
+        android:icon="@drawable/ic_home_white_24dp"
+        android:title="@string/menu_home" />
+    <item
+        android:id="@+id/listItem1"
+        android:icon="@drawable/ic_view_list_white_24dp"
+        android:title="@string/menu_recent" />
+    <item
+        android:id="@+id/profileItem"
+        android:icon="@drawable/ic_account_box_white_24dp"
+        android:title="@string/menu_info" />
+</menu>

@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Coffee</string>
+    <string name="app_name_kor">아아</string>
+    <string name="current_version">현재 버전</string>
+    <string name="newest_version">최신 버전</string>
+    <string name="copyright">Copyright ⓒ 2019 플랫폼에이트, All rights reserved.</string>
+
+
+    <string name="menu_home">홈</string>
+    <string name="menu_recent">주문내역</string>
+    <string name="menu_info">내정보</string>
 </resources>

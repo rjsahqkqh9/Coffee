@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Create by platform eight on 2019. 10. 29.
+  ~ Copyright (c) 2019. platform eight. All rights reserved.
+  -->
+
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_checked="true" android:color="@color/colorGreen" />
+    <item android:state_checked="false" android:color="#777"/>
+</selector>
