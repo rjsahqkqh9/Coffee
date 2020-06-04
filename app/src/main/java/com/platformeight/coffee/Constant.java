@@ -11,6 +11,9 @@ public final class Constant {
     //TODO: 앱배포전 도메인 주소변경
     //public static final String server_name = "http://210.89.189.186/searchcompany/";
 
+    public static final String shopdata = "ShopData";
+
+
     public static final String colorBlack = "#000000";
     public static final String colorGreen = "#00cc99";
     public static final String colorGray = "#e0e0e0";

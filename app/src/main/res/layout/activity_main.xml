@@ -10,44 +10,44 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:context=".MainActivity">
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:id="@+id/toolbar_title"
-            android:text="toolbar_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
-            android:layout_gravity="center" />
-    </androidx.appcompat.widget.Toolbar>
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:text="toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+                android:layout_gravity="center" />
+        </androidx.appcompat.widget.Toolbar>
         <View
             android:id="@+id/view_toolbar"
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:background="@android:color/black"
             android:layout_below="@+id/toolbar"/>
-    <TextView
-        android:id="@+id/text"
-        android:text="user's name님 (혹은 로그인)"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        app:layout_constraintBottom_toTopOf="@id/list"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-    <fragment
-        android:id="@+id/list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        class="com.platformeight.coffee.ItemFragment"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text"
-        tools:layout="@layout/fragment_item_list" />
+        <TextView
+            android:id="@+id/text"
+            android:text="user's name님 (혹은 로그인)"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:layout_constraintBottom_toTopOf="@id/list"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+        <fragment
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            class="com.platformeight.coffee.ItemFragment"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text"
+            tools:layout="@layout/fragment_item_list" />
     </LinearLayout>
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"

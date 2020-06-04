@@ -24,10 +24,10 @@ import java.util.List;
  */
 public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
+    private final List<ShopData> mValues;
     private final OnListFragmentInteractionListener mListner;
 
-    public MyItemRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
+    public MyItemRecyclerViewAdapter(List<ShopData> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListner = listener;
     }
@@ -42,13 +42,12 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mIdView.setText(String.valueOf(mValues.get(position).getNo()));
+        holder.mContentView.setText(mValues.get(position).getName());
         holder.mView.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View view) {
                 mListner.onListFragmentInteraction(holder.mItem);
-
             }
         });
     }
@@ -70,7 +69,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 
         public final ImageView mImageView;
 
-        public DummyItem mItem; //data 클래스 shopData
+        public ShopData mItem; //data 클래스 shopData
 
         public ViewHolder(View view) {
             super(view);

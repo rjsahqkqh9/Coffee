@@ -5,8 +5,10 @@
 
 package com.platformeight.coffee;
 
+import java.io.Serializable;
+
 // 공급자 정보
-public class ShopData {
+public class ShopData implements Serializable {
 
     // 공급 번호
     private int no;
@@ -20,6 +22,12 @@ public class ShopData {
     private String menu;
 
     private int state;
+
+    public ShopData(String no, String content, String details) {
+        this.no = Integer.parseInt(no);
+        this.name = content;
+        this.address = details;
+    }
 
     public int getNo() {
         return no;
@@ -61,6 +69,14 @@ public class ShopData {
         this.address = address;
     }
 
+    public String getMenu() {
+        return menu;
+    }
+
+    public void setMenu(String menu) {
+        this.menu = menu;
+    }
+
     // Shop 모델 복사
     public void CopyData(ShopData param)
     {
@@ -68,6 +84,7 @@ public class ShopData {
         this.name = param.getName();
         this.address = param.getAddress();
         this.phone = param.getPhone();
+        this.menu = param.getMenu();
         this.state = param.getState();
     }
 }
