@@ -1,6 +1,6 @@
 /*
- * Create by platform eight on 2019. 10. 24.
- * Copyright (c) 2019. platform eight. All rights reserved.
+ *  Create by platform eight on 2020. 6. 4.
+ *  Copyright (c) 2019. platform eight. All rights reserved.
  */
 
 package com.platformeight.coffee;
@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
 
 public class ToolBarCustom {
 
@@ -16,6 +17,7 @@ public class ToolBarCustom {
     TextView textTitle;
 
     ToolBarCustom(ActionBar action){
+        /*
         setActionBar(action);
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
@@ -23,8 +25,13 @@ public class ToolBarCustom {
         actionBar.setCustomView(R.layout.toolbar_custom);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_action_back_black);
-
+        */
+        this.actionBar = action;
+        actionBar.setDisplayShowTitleEnabled(false); // 기존 title 지우기
+        actionBar.setDisplayHomeAsUpEnabled(true); // 뒤로가기 버튼 만들기
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_action_back_black); //뒤로가기 버튼 이미지 지정
     }
+
     public void setActionBar(ActionBar actionBar) {
         this.actionBar = actionBar;
     }

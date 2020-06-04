@@ -17,6 +17,7 @@
         android:layout_height="wrap_content"
         android:text="@string/app_name"
         android:layout_gravity="center"
+        style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
         android:id="@+id/toolbar_title"
         android:textSize="20sp"/>
 

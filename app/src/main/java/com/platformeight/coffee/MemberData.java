@@ -1,6 +1,6 @@
 /*
- * Create by platform eight on 2019. 11. 1.
- * Copyright (c) 2019. platform eight. All rights reserved.
+ *  Create by platform eight on 2020. 6. 4.
+ *  Copyright (c) 2019. platform eight. All rights reserved.
  */
 
 package com.platformeight.coffee;
@@ -17,6 +17,8 @@ public class MemberData {
     private String pass;
 
     private String phone;
+
+    private int point;
 
     private int state;
 
@@ -60,6 +62,14 @@ public class MemberData {
         this.phone = phone;
     }
 
+    public int getPoint() {
+        return point;
+    }
+
+    public void setPoint(int point) {
+        this.point = point;
+    }
+
     public int getState() {
         return state;
     }
@@ -75,6 +85,8 @@ public class MemberData {
         this.name = param.getName();
         this.email = param.getEmail();
         this.pass = param.getPass();
+        this.phone = param.getPhone();
+        this.point = param.getPoint();
         this.state = param.getState();
     }
 }

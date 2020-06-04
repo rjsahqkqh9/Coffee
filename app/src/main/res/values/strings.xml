@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Coffee</string>
     <string name="app_name_kor">아아</string>
+
+    <string name="nav_header_desc">서랍이미지</string>
+    <string name="nav_header_title">서랍타이틀</string>
+    <string name="nav_header_subtitle">서랍sub타이틀</string>
 </resources>

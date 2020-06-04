@@ -1,6 +1,6 @@
 /*
- * Create by platform eight on 2019. 10. 22.
- * Copyright (c) 2019. platform eight. All rights reserved.
+ *  Create by platform eight on 2020. 6. 4.
+ *  Copyright (c) 2019. platform eight. All rights reserved.
  */
 
 package com.platformeight.coffee;
@@ -11,7 +11,6 @@ import android.util.Log;
 public class MyApplication extends Application {
 
     public static MemberData user;
-    public static int app_state = 1;  // 1 고객 2 기업  //화면리스트 분기할것 역경매방식
 
     @Override
     public void onCreate() {
