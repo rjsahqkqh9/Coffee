@@ -23,9 +23,12 @@ import java.util.List;
 public class MymenuRecyclerViewAdapter extends RecyclerView.Adapter<MymenuRecyclerViewAdapter.ViewHolder> {
 
     private final List<DummyItem> mValues;
+    private final MenuFragment.OnListFragmentInteractionListener mListner;
 
-    public MymenuRecyclerViewAdapter(List<DummyItem> items) {
+    public MymenuRecyclerViewAdapter(List<DummyItem> items, MenuFragment.OnListFragmentInteractionListener listener) {
         mValues = items;
+        mListner = listener;
+
     }
 
     @Override
@@ -43,6 +46,12 @@ public class MymenuRecyclerViewAdapter extends RecyclerView.Adapter<MymenuRecycl
         holder.mMenuView.setText("menu "+position);
         holder.mMenuHotView.setText(mValues.get(position).content);
         holder.mMenuIceView.setText(mValues.get(position).content);
+        holder.mView.setOnClickListener(new OnSingleClickListener() {
+            @Override
+            public void onSingleClick(View view) {
+                mListner.onListFragmentInteraction(holder.mItem);
+            }
+        });
 
     }
 

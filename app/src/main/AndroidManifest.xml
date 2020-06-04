@@ -35,6 +35,8 @@
         <activity
             android:name=".ShopActivity"
             android:theme="@style/NoTheme" />
+        <activity android:name=".OrderActivity"
+            android:theme="@style/NoTheme"/>
     </application>
 
 </manifest>
