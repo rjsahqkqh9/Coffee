@@ -28,7 +28,7 @@ public class MenuFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
-    private ItemFragment.OnListFragmentInteractionListener mListener;
+    private MenuFragment.OnListFragmentInteractionListener mListener;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -79,8 +79,8 @@ public class MenuFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof ItemFragment.OnListFragmentInteractionListener) {
-            mListener = (ItemFragment.OnListFragmentInteractionListener) context;
+        if (context instanceof MenuFragment.OnListFragmentInteractionListener) {
+            mListener = (MenuFragment.OnListFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
