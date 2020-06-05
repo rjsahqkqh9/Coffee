@@ -23,11 +23,7 @@
             android:name=".IntroActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".MainActivity"
@@ -36,7 +32,13 @@
             android:name=".ShopActivity"
             android:theme="@style/NoTheme" />
         <activity android:name=".OrderActivity"
-            android:theme="@style/NoTheme"/>
+            android:theme="@style/NoTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

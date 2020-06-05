@@ -56,9 +56,7 @@ public class OrderActivity extends AppCompatActivity {
         minus_Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(count <= 1){
-                    return;
-                }else{
+                if(count > 1){
                     countText.setText("" + count--);
                 }
             }
