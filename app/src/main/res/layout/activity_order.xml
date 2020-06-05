@@ -13,14 +13,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:srcCompat="@tools:sample/avatars" />
-
+    <TextView
+        android:id="@+id/order_menu_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textStyle="bold"
+        tools:text="메뉴명"/>
     <TextView
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:gravity="start"
-        android:text="기본" />
+        android:text="@string/order_category_text1" />
 
     <RadioGroup
         android:id="@+id/radioGroup"
@@ -35,15 +41,16 @@
                 android:id="@+id/radioButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Hot" />
+                android:text="@string/order_text_hot" />
 
             <TextView
                 android:id="@+id/textView8"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="250dp"
-                android:gravity="right"
-                android:text="가격1" />
+                android:gravity="end"
+                android:text=""
+                tools:text="가격" />
         </LinearLayout>
 
         <LinearLayout
@@ -55,16 +62,17 @@
                 android:id="@+id/radioButton2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ice" />
+                android:text="@string/order_text_ice" />
 
             <TextView
                 android:id="@+id/textView9"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="250dp"
+                android:layout_marginStart="250dp"
                 android:layout_weight="1"
-                android:gravity="right"
-                android:text="가격2" />
+                android:gravity="end"
+                android:text=""
+                tools:text="가격" />
         </LinearLayout>
 
     </RadioGroup>
@@ -77,7 +85,7 @@
         android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="추가선택"
+        android:text="@string/order_text_category2"
         tools:layout_marginTop="10dp" />
 
     <LinearLayout
@@ -93,25 +101,26 @@
 
         <TextView
             android:id="@+id/textView7"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginLeft="250dp"
-            android:gravity="right"
-            android:text="샷가격" />
+            android:layout_marginStart="250dp"
+            android:gravity="end"
+            tools:text="샷가격"
+            android:text="500" />
     </LinearLayout>
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="수량"
+        android:text="@string/order_text_category3"
         tools:layout_marginTop="10dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="250dp"
+        android:layout_marginStart="250dp"
         android:orientation="horizontal">
 
         <Button
@@ -119,7 +128,7 @@
             android:layout_width="5dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="-" />
+            android:text="@string/order_sign_minus" />
 
         <TextView
             android:id="@+id/textView4"
@@ -128,15 +137,14 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="1"
-            android:textSize="20dp"
-            />
+            android:textSize="20sp" />
 
         <Button
             android:id="@+id/button4"
             android:layout_width="5dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="+" />
+            android:text="@string/order_sign_plus" />
 
     </LinearLayout>
 
@@ -149,7 +157,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/colorRed"
-        android:text="※방문까지 5분이상이 소요되지 않게 주의해주세요" />
+        android:text="@string/order_text_cautionmessage" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -168,14 +176,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="장바구니 담기" />
+                android:text="@string/order_btn_cart_keep" />
 
             <Button
                 android:id="@+id/button8"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="결제하기" />
+                android:text="@string/order_btn_cart_open" />
 
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

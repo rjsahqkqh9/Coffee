@@ -6,6 +6,8 @@
 package com.platformeight.coffee;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,7 +18,10 @@ import com.platformeight.coffee.dummy.DummyContent;
 public class ShopActivity extends AppCompatActivity implements MenuFragment.OnListFragmentInteractionListener{
     private ShopData shop;
     private String cart;
-    TextView title;
+    private TextView title;
+    private FragmentManager fragmentManager;
+    private MenuFragment menu;
+    private FragmentTransaction transaction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,13 +41,23 @@ public class ShopActivity extends AppCompatActivity implements MenuFragment.OnLi
         shop = (ShopData) getIntent().getSerializableExtra(Constant.shopdata);
         title.setText(shop.getName());
 
+        //TODO: shop_no로 메뉴 및 정보 호출
+        fragmentManager = getSupportFragmentManager();
+        Bundle bundle = new Bundle(1);
+        bundle.putString(Constant.menu, shop.getMenu());
+        //bundle.putString(Constant.menu, "menu");
+        menu = new MenuFragment();
+        menu.setArguments(bundle);
+        transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.menu_list, menu).commitAllowingStateLoss();
+
     }
     @Override
     public void onListFragmentInteraction(DummyContent.DummyItem item) {
-        Intent intent = new Intent(this, OrderActivity.class);
-        //intent.putExtra(Constant.shopdata, item);
-        startActivity(intent);
 
+        Intent intent = new Intent(this, OrderActivity.class);
+        intent.putExtra("menu_no", "1");
+        startActivity(intent);
         //Toast.makeText(this, "event "+item.content, Toast.LENGTH_SHORT).show();
     }
 }

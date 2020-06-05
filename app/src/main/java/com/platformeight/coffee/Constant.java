@@ -12,7 +12,7 @@ public final class Constant {
     //public static final String server_name = "http://210.89.189.186/searchcompany/";
 
     public static final String shopdata = "ShopData";
-
+    public static final String menu = "menu";
 
     public static final String colorBlack = "#000000";
     public static final String colorGreen = "#00cc99";

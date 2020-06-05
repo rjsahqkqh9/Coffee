@@ -49,7 +49,7 @@ public class OrderActivity extends AppCompatActivity {
         add_Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                countText.setText("" + count++);
+                countText.setText("" + ++count);
             }
         });
 
@@ -57,7 +57,7 @@ public class OrderActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(count > 1){
-                    countText.setText("" + count--);
+                    countText.setText("" + --count);
                 }
             }
         });
@@ -68,8 +68,8 @@ public class OrderActivity extends AppCompatActivity {
         add_Shot = (CheckBox)findViewById(R.id.checkBox);
         add_Shot.setChecked(false);
 
-        String text_Shotprice = price_Shot.toString();
-
+        String text_Shotprice = (String) price_Shot.getText();
+        text_Shotprice="5000";
         if(add_Shot.isChecked()){
             price = price + Integer.parseInt(text_Shotprice.substring(0, text_Shotprice.length() - 1));
         }else{

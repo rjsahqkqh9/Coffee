@@ -6,27 +6,57 @@
 package com.platformeight.coffee;
 
 import java.io.Serializable;
+import java.time.LocalTime;
 
 // 공급자 정보
 public class ShopData implements Serializable {
 
-    // 공급 번호
+    // 점포번호
     private int no;
 
+    // 점포사진
+    private String image;
+
+    // 점포명
     private String name;
 
+    // 주소
     private String address;
 
+    // 전화번호 : 고객측 이용x
     private String phone;
 
+    // 메뉴
     private String menu;
 
+    // 영업상태
     private int state;
 
-    public ShopData(String no, String content, String details) {
+    // 좌표x
+    private Double mapx;
+
+    // 좌표y
+    private Double mapy;
+
+    // 영업시작시간
+    private LocalTime shopOpen;
+
+    // 영업종료시간
+    private LocalTime shopClose;
+
+    // 등급
+    private int promotion;
+
+    public ShopData(String no, String image, String name, int state, String shopOpen, String shopClose) { //itemfragment 리스트용
+        //리스트에 출력
         this.no = Integer.parseInt(no);
-        this.name = content;
-        this.address = details;
+        this.image = image;
+        this.name = name;
+
+        //영업중인지 확인
+        this.state = state;
+        this.shopOpen = LocalTime.parse(shopOpen);
+        this.shopClose = LocalTime.parse(shopClose);
     }
 
     public int getNo() {
@@ -77,6 +107,46 @@ public class ShopData implements Serializable {
         this.menu = menu;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public Double getMapx() {
+        return mapx;
+    }
+
+    public void setMapx(Double mapx) {
+        this.mapx = mapx;
+    }
+
+    public Double getMapy() {
+        return mapy;
+    }
+
+    public void setMapy(Double mapy) {
+        this.mapy = mapy;
+    }
+
+    public LocalTime getShopOpen() {
+        return shopOpen;
+    }
+
+    public void setShopOpen(LocalTime shopOpen) {
+        this.shopOpen = shopOpen;
+    }
+
+    public LocalTime getShopClose() {
+        return shopClose;
+    }
+
+    public void setShopClose(LocalTime shopClose) {
+        this.shopClose = shopClose;
+    }
+
     // Shop 모델 복사
     public void CopyData(ShopData param)
     {
@@ -85,6 +155,12 @@ public class ShopData implements Serializable {
         this.address = param.getAddress();
         this.phone = param.getPhone();
         this.menu = param.getMenu();
+        this.mapx = param.getMapx();
+        this.mapy = param.getMapy();
+        this.shopOpen = param.getShopOpen();
+        this.shopClose = param.getShopClose();
+        //this.promotion = param.getPromotion();
+        this.image = param.getImage();
         this.state = param.getState();
     }
 }

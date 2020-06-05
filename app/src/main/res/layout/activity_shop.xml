@@ -10,8 +10,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/text"
@@ -28,17 +27,15 @@
         android:id="@+id/view_line"
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:background="@android:color/black"
-        android:layout_below="@+id/text"/>
+        android:background="@android:color/black" />
     <View
         android:id="@+id/space"
         android:layout_width="match_parent"
         android:layout_height="100dp"/>
-    <fragment
-        android:id="@+id/list"
+    <FrameLayout
+        android:id="@+id/menu_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        class="com.platformeight.coffee.MenuFragment"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

@@ -57,7 +57,6 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
     private void initialData() {
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
-
     }
 
     private void initialView() {
@@ -72,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
-                menuItem.setChecked(true);
+                //menuItem.setChecked(true);
                 mDrawerLayout.closeDrawers();
 
                 int id = menuItem.getItemId();
@@ -87,16 +86,18 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
                 else if(id == R.id.logout){
                     Toast.makeText(context, title + ": 로그아웃 시도중", Toast.LENGTH_SHORT).show();
                 }
-
-                return true;
+                else if(id == R.id.order_List){
+                    Toast.makeText(context, title + ": 주문 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
+                }
+                return false;
             }
         });
     }
 
     @Override
-    public void onListFragmentInteraction(ShopData item) {
+    public void onListFragmentInteraction(ShopData data) { //점포 클릭시 적용
         Intent intent = new Intent(this, ShopActivity.class);
-        intent.putExtra(Constant.shopdata, item);
+        intent.putExtra(Constant.shopdata, data);
         startActivity(intent);
 
         //Toast.makeText(this, "event "+item.content, Toast.LENGTH_SHORT).show();

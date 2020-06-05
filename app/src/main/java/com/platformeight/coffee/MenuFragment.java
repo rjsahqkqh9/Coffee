@@ -9,15 +9,18 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.platformeight.coffee.dummy.DummyContent;
+import com.platformeight.coffee.dummy.ShopContent;
 
 /**
  * A fragment representing a list of Items.
@@ -26,15 +29,18 @@ public class MenuFragment extends Fragment {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
+    private static final String TAG = "MenuFragment";
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private MenuFragment.OnListFragmentInteractionListener mListener;
+    private String menu_json;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
     public MenuFragment() {
+
     }
 
     // TODO: Customize parameter initialization
@@ -70,8 +76,14 @@ public class MenuFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            
+            Bundle bundle = getArguments();
+            if (bundle != null) {
+                menu_json = bundle.getString(Constant.menu);
+            }
+            Log.d(TAG, "onCreateView: "+ menu_json);
             recyclerView.setAdapter(new MymenuRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(context,LinearLayoutManager.VERTICAL);
+            recyclerView.addItemDecoration(dividerItemDecoration);
         }
         return view;
     }

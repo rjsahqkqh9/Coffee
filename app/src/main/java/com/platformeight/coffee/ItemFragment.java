@@ -72,6 +72,9 @@ public class ItemFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
+
+            //TODO:리스트 구성 3개 랜덤리스트 이후 거리순 open, close, state로 회색처리
+
             recyclerView.setAdapter(new MyItemRecyclerViewAdapter(ShopContent.ITEMS, mListener));
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(context,LinearLayoutManager.VERTICAL);
             //dividerItemDecoration.setDrawable(context.getResources().getDrawable(R.drawable.recyclerview_divider));
@@ -107,6 +110,6 @@ public class ItemFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnListFragmentInteractionListener {
-        void onListFragmentInteraction(ShopData dummy);
+        void onListFragmentInteraction(ShopData data);
     }
 }

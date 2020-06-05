@@ -1,5 +1,6 @@
 package com.platformeight.coffee.dummy;
 
+import com.platformeight.coffee.MenuData;
 import com.platformeight.coffee.ShopData;
 
 import java.util.ArrayList;
@@ -13,19 +14,19 @@ import java.util.Map;
  * <p>
  * TODO: Replace all uses of this class before publishing your app.
  */
-public class ShopContent {
+public class MenuContent {
 
     /**
      * An array of sample (dummy) items.
      */
-    public static final List<ShopData> ITEMS = new ArrayList<ShopData>();
+    public static final List<MenuData> ITEMS = new ArrayList<MenuData>();
 
     /**
      * A map of sample (dummy) items, by ID.
      */
-    public static final Map<String, ShopData> ITEM_MAP = new HashMap<String, ShopData>();
+    public static final Map<String, MenuData> ITEM_MAP = new HashMap<String, MenuData>();
 
-    private static final int COUNT = 25;
+    private static final int COUNT = 10;
 
     static {
         // Add some sample items.
@@ -34,13 +35,13 @@ public class ShopContent {
         }
     }
 
-    private static void addItem(ShopData item) {
+    private static void addItem(MenuData item) {
         ITEMS.add(item);
         ITEM_MAP.put(String.valueOf(item.getNo()), item);
     }
 
-    private static ShopData createShopItem(int position) {
-        return new ShopData(String.valueOf(position), "image", "카페 sample " + position,1, "10:00", "17:00");
+    private static MenuData createShopItem(int position) {
+        return new MenuData(String.valueOf(position), "메뉴명 "+position);
         //return new ShopData(String.valueOf(position), "카페 sample " + position, makeDetails(position));
     }
 
