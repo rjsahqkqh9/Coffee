@@ -22,6 +22,10 @@ import android.view.ViewGroup;
 import com.platformeight.coffee.dummy.DummyContent;
 import com.platformeight.coffee.dummy.ShopContent;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * A fragment representing a list of Items.
  */
@@ -80,7 +84,15 @@ public class MenuFragment extends Fragment {
             if (bundle != null) {
                 menu_json = bundle.getString(Constant.menu);
             }
-            Log.d(TAG, "onCreateView: "+ menu_json);
+            Log.d(TAG, "menu json : "+ menu_json);
+            try {
+                JSONArray ja = new JSONArray(menu_json);
+                for(int i=0;i<ja.length();i++){
+                    JSONObject js = (JSONObject) ja.get(i);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             recyclerView.setAdapter(new MymenuRecyclerViewAdapter(DummyContent.ITEMS, mListener));
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(context,LinearLayoutManager.VERTICAL);
             recyclerView.addItemDecoration(dividerItemDecoration);

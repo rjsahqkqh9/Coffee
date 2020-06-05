@@ -15,6 +15,10 @@ import android.widget.TextView;
 
 import com.platformeight.coffee.dummy.DummyContent;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class ShopActivity extends AppCompatActivity implements MenuFragment.OnListFragmentInteractionListener{
     private ShopData shop;
     private String cart;
@@ -44,8 +48,26 @@ public class ShopActivity extends AppCompatActivity implements MenuFragment.OnLi
         //TODO: shop_no로 메뉴 및 정보 호출
         fragmentManager = getSupportFragmentManager();
         Bundle bundle = new Bundle(1);
-        bundle.putString(Constant.menu, shop.getMenu());
-        //bundle.putString(Constant.menu, "menu");
+        //bundle.putString(Constant.menu, shop.getMenu());
+
+        JSONArray js_menus = new JSONArray();
+        JSONObject js_menu = new JSONObject();
+        try {
+            js_menu.put("name","아메리카노");
+            js_menu.put("hot",4300);
+            js_menu.put("ice",5000);
+            //js_menu.put("basic",4300);
+            JSONArray ja = new JSONArray();
+            JSONObject js1 = new JSONObject();
+            js1.put("샷추가",500);
+            js1.put("휘핑크림",300);
+            ja.put(js1);
+            js_menu.put("opt",ja);
+            js_menus.put(js_menu);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        bundle.putString(Constant.menu, js_menus.toString());
         menu = new MenuFragment();
         menu.setArguments(bundle);
         transaction = fragmentManager.beginTransaction();
