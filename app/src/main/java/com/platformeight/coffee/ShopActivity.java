@@ -51,16 +51,48 @@ public class ShopActivity extends AppCompatActivity implements MenuFragment.OnLi
         //bundle.putString(Constant.menu, shop.getMenu());
 
         JSONArray js_menus = new JSONArray();
-        JSONObject js_menu = new JSONObject();
         try {
-            js_menu.put("name","아메리카노");
-            js_menu.put("hot",4300);
-            js_menu.put("ice",5000);
-            //js_menu.put("basic",4300);
+            JSONObject js_menu = new JSONObject();
             JSONArray ja = new JSONArray();
             JSONObject js1 = new JSONObject();
+            js_menu.put("name","아메리카노");
+            js_menu.put("image", "이미지주소값");
+            js_menu.put("bnum","2");
+            js_menu.put("onum","2");
+            //js_menu.put("hot",4300);
+            //js_menu.put("ice",5000);
+            //js_menu.put("basic",4300);
+            js1.put("HOT",4300);
+            js1.put("ICE",5000);
+            //js1.put("basic",4300);
+            ja.put(js1);
+            js_menu.put("base",ja);
+            ja = new JSONArray();
+            js1 = new JSONObject();
             js1.put("샷추가",500);
             js1.put("휘핑크림",300);
+            ja.put(js1);
+            js_menu.put("opt",ja);
+            js_menus.put(js_menu);
+
+            js_menu = new JSONObject();
+            ja = new JSONArray();
+            js1 = new JSONObject();
+            js_menu.put("name","카페라떼");
+            js_menu.put("image", "이미지주소값");
+            js_menu.put("bnum","2");
+            js_menu.put("onum","1");
+            //js_menu.put("hot",4300);
+            //js_menu.put("ice",5000);
+            //js_menu.put("basic",4300);
+            js1.put("HOT",4500);
+            js1.put("ICE",5300);
+            //js1.put("basic",4300);
+            ja.put(js1);
+            js_menu.put("base",ja);
+            ja = new JSONArray();
+            js1 = new JSONObject();
+            js1.put("샷추가",500);
             ja.put(js1);
             js_menu.put("opt",ja);
             js_menus.put(js_menu);
@@ -75,10 +107,10 @@ public class ShopActivity extends AppCompatActivity implements MenuFragment.OnLi
 
     }
     @Override
-    public void onListFragmentInteraction(DummyContent.DummyItem item) {
+    public void onListFragmentInteraction(JSONObject item) {
 
         Intent intent = new Intent(this, OrderActivity.class);
-        intent.putExtra("menu_no", "1");
+        intent.putExtra("menu", item.toString());
         startActivity(intent);
         //Toast.makeText(this, "event "+item.content, Toast.LENGTH_SHORT).show();
     }

@@ -10,10 +10,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.platformeight.coffee.dummy.DummyContent.DummyItem;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.DecimalFormat;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -22,13 +29,12 @@ import java.util.List;
  */
 public class MymenuRecyclerViewAdapter extends RecyclerView.Adapter<MymenuRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
+    private final List<JSONObject> mValues;
     private final MenuFragment.OnListFragmentInteractionListener mListner;
 
-    public MymenuRecyclerViewAdapter(List<DummyItem> items, MenuFragment.OnListFragmentInteractionListener listener) {
+    public MymenuRecyclerViewAdapter(List<JSONObject> items, MenuFragment.OnListFragmentInteractionListener listener) {
         mValues = items;
         mListner = listener;
-
     }
 
     @Override
@@ -41,11 +47,31 @@ public class MymenuRecyclerViewAdapter extends RecyclerView.Adapter<MymenuRecycl
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
+        //holder.mMenuView.setText("menu "+position);
         //holder.mIdView.setText(mValues.get(position).id);
         //holder.mContentView.setText(mValues.get(position).content);
-        holder.mMenuView.setText("menu "+position);
-        holder.mMenuHotView.setText(mValues.get(position).content);
-        holder.mMenuIceView.setText(mValues.get(position).content);
+        try {
+            holder.mMenuView.setText(holder.mItem.getString("name"));
+            JSONArray ja = new JSONArray(holder.mItem.getString("base"));
+            DecimalFormat format = new DecimalFormat("###,###");
+            JSONObject js = ja.getJSONObject(0);
+            /*
+             */
+            for(Iterator<String> itr = js.keys(); itr.hasNext();){
+                String str = itr.next();
+                TextView tv = new TextView(holder.mView.getContext());
+                tv.setText(String.format("- "+str+" : ￦%s원", format.format(js.getInt(str))));
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                tv.setLayoutParams(lp);
+                holder.mTextGroup.addView(tv);
+            }
+            //holder.mMenuHotView.setText(String.format("- HOT : ￦%s원", format.format(js.getInt("hot"))));
+            //holder.mMenuIceView.setText(String.format("- ICE : ￦%s원", format.format(js.getInt("ice"))));
+            //holder.mMenuHotView.setText("HOT : " + js.getString("hot"));
+            //holder.mMenuIceView.setText("ICE : " + js.getString("ice"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         holder.mView.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View view) {
@@ -67,8 +93,9 @@ public class MymenuRecyclerViewAdapter extends RecyclerView.Adapter<MymenuRecycl
         public final TextView mMenuView;
         public final TextView mMenuHotView;
         public final TextView mMenuIceView;
+        public final LinearLayout mTextGroup;
 
-        public DummyItem mItem;
+        public JSONObject mItem;
 
         public ViewHolder(View view) {
             super(view);
@@ -78,6 +105,7 @@ public class MymenuRecyclerViewAdapter extends RecyclerView.Adapter<MymenuRecycl
             mMenuView = (TextView) view.findViewById(R.id.menu);
             mMenuHotView = (TextView) view.findViewById(R.id.menu_hot);
             mMenuIceView = (TextView) view.findViewById(R.id.menu_ice);
+            mTextGroup = (LinearLayout) view.findViewById(R.id.menu_base);
         }
 
         @Override

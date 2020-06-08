@@ -26,6 +26,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A fragment representing a list of Items.
  */
@@ -80,20 +83,24 @@ public class MenuFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
+
             Bundle bundle = getArguments();
             if (bundle != null) {
                 menu_json = bundle.getString(Constant.menu);
             }
             Log.d(TAG, "menu json : "+ menu_json);
+            List<JSONObject> menu = new ArrayList<JSONObject>();
             try {
                 JSONArray ja = new JSONArray(menu_json);
                 for(int i=0;i<ja.length();i++){
                     JSONObject js = (JSONObject) ja.get(i);
+                    menu.add(js);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            recyclerView.setAdapter(new MymenuRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            //recyclerView.setAdapter(new MymenuRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            recyclerView.setAdapter(new MymenuRecyclerViewAdapter(menu, mListener));
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(context,LinearLayoutManager.VERTICAL);
             recyclerView.addItemDecoration(dividerItemDecoration);
         }
@@ -128,6 +135,6 @@ public class MenuFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnListFragmentInteractionListener {
-        void onListFragmentInteraction(DummyContent.DummyItem dummy);
+        void onListFragmentInteraction(JSONObject item);
     }
 }

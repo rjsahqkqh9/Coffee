@@ -17,6 +17,6 @@
     <string name="order_text_cautionmessage">※방문까지 5분이상이 소요되지 않게 주의해주세요</string>
     <string name="order_sign_plus">+</string>
     <string name="order_sign_minus">-</string>
-    <string name="order_text_hot">Hot</string>
-    <string name="order_text_ice">Ice</string>
+    <string name="order_text_hot">HOT</string>
+    <string name="order_text_ice">ICE</string>
 </resources>
