@@ -24,6 +24,7 @@
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -35,6 +36,9 @@
             android:theme="@style/NoTheme" />
         <activity
             android:name=".OrderActivity"
+            android:theme="@style/NoTheme" />
+        <activity
+            android:name=".CartActivity"
             android:theme="@style/NoTheme" />
     </application>
 

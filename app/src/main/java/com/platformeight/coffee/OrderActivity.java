@@ -2,7 +2,10 @@ package com.platformeight.coffee;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +23,9 @@ import org.json.JSONObject;
 import java.text.DecimalFormat;
 import java.util.Iterator;
 import java.util.Objects;
+
+import static com.platformeight.coffee.Constant.cart;
+import static com.platformeight.coffee.Constant.cart_code;
 
 public class OrderActivity extends AppCompatActivity {
 
@@ -46,6 +52,8 @@ public class OrderActivity extends AppCompatActivity {
 
     private int count = 1;/*음료 기본수량*/
     private int price = 0;
+    private int base_num = 0;
+    private int opt_num = 0;
 
     private JSONObject menu;
     private JSONObject base;
@@ -65,6 +73,8 @@ public class OrderActivity extends AppCompatActivity {
         try {
             menu = new JSONObject(Objects.requireNonNull(getIntent().getStringExtra("menu")));
             menuName.setText(menu.getString("name"));
+            base_num = menu.getInt("bnum");
+            opt_num = menu.getInt("onum");
 
             JSONArray ja = new JSONArray(menu.getString("base"));
             base = ja.getJSONObject(0);
@@ -78,14 +88,15 @@ public class OrderActivity extends AppCompatActivity {
                 lp.gravity=Gravity.END;
                 lp.weight=1;
                 tv.setLayoutParams(lp);
-                tv.setTag(str);
+                //tv.setTag(str);
                 radio_price.addView(tv);
 
                 RadioButton rb = new RadioButton(this);
                 rb.setText(str);
                 radio_Group.addView(rb);
-
             }
+            radio_Group.check((int) 1);
+
             ja = new JSONArray(menu.getString("opt"));
             opt = ja.getJSONObject(0);
             for(Iterator<String> itr = opt.keys(); itr.hasNext();){
@@ -97,7 +108,7 @@ public class OrderActivity extends AppCompatActivity {
                 lp.gravity=Gravity.END;
                 lp.weight=1;
                 tv.setLayoutParams(lp);
-                tv.setTag(str);
+                //tv.setTag(str);
                 check_price.addView(tv);
 
                 CheckBox cb = new CheckBox(this);
@@ -141,44 +152,23 @@ public class OrderActivity extends AppCompatActivity {
         });
         /*수량 증감소 끝*/
 
-        /*샷추가 시작*/
-        check_group = findViewById(R.id.order_check_group);
-        check_price = findViewById(R.id.order_check_price);
-        price_Shot = (TextView)findViewById(R.id.textView7);
-        add_Shot = (CheckBox)findViewById(R.id.checkBox);
-        add_Shot.setChecked(false);
-
-        String text_Shotprice = (String) price_Shot.getText();
-        text_Shotprice="5000";
-        if(add_Shot.isChecked()){
-            price = price + Integer.parseInt(text_Shotprice.substring(0, text_Shotprice.length() - 1));
-        }else{
-            price = price - Integer.parseInt(text_Shotprice.substring(0, text_Shotprice.length() - 1));
-        }
-        /*샷추가 끝*/
-
         /*음료 Hot Ice 선택 시작*/
         radio_Group = (RadioGroup)findViewById(R.id.radioGroup);
         radio_price = findViewById(R.id.order_radio_price);
-
-        radio_Group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                if(i == R.id.radioButton){
-                    //price = Integer.parseInt(hot_Price.toString().substring(0, hot_Price.toString().length() - 1));
-                }else if(i == R.id.radioButton2){
-                    //price = Integer.parseInt(ice_Price.toString().substring(0, ice_Price.toString().length() - 1));
-                }
-            }
-        });
         /*음료 Hot Ice 선택 끝*/
+        /*옵션추가 시작*/
+        check_group = findViewById(R.id.order_check_group);
+        check_price = findViewById(R.id.order_check_price);
+        /*옵션추가 끝*/
 
         /*장바구니 버튼 시작*/
         cart_Button = (Button)findViewById(R.id.button7);
         cart_Button.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View view) {
-
+                //장바구니 상품정보 전송후 뒤로가기
+                Log.d(TAG, "cart_Button: " +store_cart());
+                intent(false);
             }
         });
         /*장바구니 버튼 끝*/
@@ -188,10 +178,38 @@ public class OrderActivity extends AppCompatActivity {
         pay_Button.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View view) {
-
+                //장바구니로
+                //if (!radio_Group.isSelected()) return;
+                Log.d(TAG, "pay_Button: " +store_cart());
+                intent(true);
             }
         });
         /*결제 버튼 끝*/
     }
+    private String store_cart(){  //TODO:카트리스트에 현재 주문 추가
+        String result = "";
+        try {
+            result = (String) menuName.getText();
+            int i = radio_Group.getCheckedRadioButtonId();
+            result = result + " base: "+ base.names().getString(i-1);
 
+            for(i=1;i<=opt_num;i++){
+                CheckBox box = (CheckBox) check_group.getChildAt(i);
+                if (box.isChecked()) {
+                    result= result +" opt "+box.getText();
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        result+= " 수량: "+count;
+        return result;
+    }
+    private void intent(boolean run_cart){
+        Intent result = new Intent();
+        result.putExtra(cart,store_cart());
+        result.putExtra(cart_code,run_cart);
+        setResult(RESULT_OK,result);
+        finish();
+    }
 }

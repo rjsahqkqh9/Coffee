@@ -124,7 +124,7 @@
             android:layout_width="5dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/order_sign_minus" />
+            android:text="@string/sign_minus" />
 
         <TextView
             android:id="@+id/textView4"
@@ -140,7 +140,7 @@
             android:layout_width="5dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/order_sign_plus" />
+            android:text="@string/sign_plus" />
 
     </LinearLayout>
 

@@ -15,8 +15,10 @@
     <string name="order_text_category2">추가선택</string>
     <string name="order_text_category3">수량</string>
     <string name="order_text_cautionmessage">※방문까지 5분이상이 소요되지 않게 주의해주세요</string>
-    <string name="order_sign_plus">+</string>
-    <string name="order_sign_minus">-</string>
+    <string name="sign_plus">+</string>
+    <string name="sign_minus">-</string>
     <string name="order_text_hot">HOT</string>
     <string name="order_text_ice">ICE</string>
+    <string name="cart_name">장바구니</string>
+    <string name="cart_del">삭제</string>
 </resources>

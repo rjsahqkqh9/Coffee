@@ -13,18 +13,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import com.platformeight.coffee.dummy.DummyContent;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import static com.platformeight.coffee.Constant.cart;
+import static com.platformeight.coffee.Constant.cart_code;
+import static com.platformeight.coffee.Constant.menu;
+import static com.platformeight.coffee.Constant.result_cart;
+
 public class ShopActivity extends AppCompatActivity implements MenuFragment.OnListFragmentInteractionListener{
     private ShopData shop;
-    private String cart;
+    private String cart_list;
     private TextView title;
     private FragmentManager fragmentManager;
-    private MenuFragment menu;
+    private MenuFragment menuFragment;
     private FragmentTransaction transaction;
 
     @Override
@@ -57,8 +60,8 @@ public class ShopActivity extends AppCompatActivity implements MenuFragment.OnLi
             JSONObject js1 = new JSONObject();
             js_menu.put("name","아메리카노");
             js_menu.put("image", "이미지주소값");
-            js_menu.put("bnum","2");
-            js_menu.put("onum","2");
+            js_menu.put("bnum",2);
+            js_menu.put("onum",2);
             //js_menu.put("hot",4300);
             //js_menu.put("ice",5000);
             //js_menu.put("basic",4300);
@@ -80,8 +83,8 @@ public class ShopActivity extends AppCompatActivity implements MenuFragment.OnLi
             js1 = new JSONObject();
             js_menu.put("name","카페라떼");
             js_menu.put("image", "이미지주소값");
-            js_menu.put("bnum","2");
-            js_menu.put("onum","1");
+            js_menu.put("bnum",2);
+            js_menu.put("onum",1);
             //js_menu.put("hot",4300);
             //js_menu.put("ice",5000);
             //js_menu.put("basic",4300);
@@ -99,19 +102,36 @@ public class ShopActivity extends AppCompatActivity implements MenuFragment.OnLi
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        bundle.putString(Constant.menu, js_menus.toString());
-        menu = new MenuFragment();
-        menu.setArguments(bundle);
+        bundle.putString(menu, js_menus.toString());
+        menuFragment = new MenuFragment();
+        menuFragment.setArguments(bundle);
         transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.menu_list, menu).commitAllowingStateLoss();
+        transaction.replace(R.id.menu_list, menuFragment).commitAllowingStateLoss();
 
     }
     @Override
     public void onListFragmentInteraction(JSONObject item) {
 
         Intent intent = new Intent(this, OrderActivity.class);
-        intent.putExtra("menu", item.toString());
-        startActivity(intent);
+        intent.putExtra(menu, item.toString());
+        intent.putExtra(cart, cart_list);
+        //startActivity(intent);
+        startActivityForResult(intent,result_cart);
         //Toast.makeText(this, "event "+item.content, Toast.LENGTH_SHORT).show();
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == result_cart && resultCode == RESULT_OK) { //장바구니 담아두기
+            if (data.hasExtra(cart) && data.hasExtra(cart_code)) {
+                this.cart_list = data.getStringExtra(cart);
+                if (data.getBooleanExtra(cart_code,false)){//장바구니 실행
+                    Intent intent = new Intent(this, CartActivity.class);
+                    intent.putExtra(Constant.cart, cart_list);
+                    startActivity(intent);
+                }
+            }
+        }
     }
 }
