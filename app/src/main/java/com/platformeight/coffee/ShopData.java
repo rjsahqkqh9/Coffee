@@ -5,6 +5,9 @@
 
 package com.platformeight.coffee;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Serializable;
 import java.time.LocalTime;
 
@@ -52,6 +55,18 @@ public class ShopData implements Serializable {
         this.no = Integer.parseInt(no);
         this.image = image;
         this.name = name;
+
+        //영업중인지 확인
+        this.state = state;
+        this.shopOpen = LocalTime.parse(shopOpen);
+        this.shopClose = LocalTime.parse(shopClose);
+    }
+    public ShopData(String no, String image, String name, String menu, int state, String shopOpen, String shopClose) { //itemfragment 리스트용
+        //리스트에 출력
+        this.no = Integer.parseInt(no);
+        this.image = image;
+        this.name = name;
+        this.menu = menu;
 
         //영업중인지 확인
         this.state = state;

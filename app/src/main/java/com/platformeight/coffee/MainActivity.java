@@ -11,6 +11,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
 import android.content.Context;
@@ -19,32 +21,55 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
-import com.platformeight.coffee.dummy.DummyContent;
+import com.platformeight.coffee.mylocation.NetworkTask;
+import com.platformeight.coffee.ui.login.LoginActivity;
 
-import java.io.Serializable;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+
+import static com.platformeight.coffee.Constant.login_state;
+import static com.platformeight.coffee.Constant.menu;
+import static com.platformeight.coffee.Constant.result_login;
+import static com.platformeight.coffee.MyApplication.user;
 
 public class MainActivity extends AppCompatActivity implements ItemFragment.OnListFragmentInteractionListener{
     private static final String TAG = "main";
     private ToolBarCustom toolBar;
     private DrawerLayout mDrawerLayout;
+    private NavigationView navigationView;
+    private TextView name;
+    private TextView tv_name;
+    private TextView point;
     private Context context = this;
+    private ItemFragment item;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     float DEFAULT_ZOOM = 15;
-    Location mLastKnownLocation;
+    private Location mLastKnownLocation;
 
     private boolean mPermissionDenied = false;
     private boolean mLocationPermissionGranted = false;
+    private boolean mLoginForm = true;
 
     private FusedLocationProviderClient mFusedLocationProviderClient;
+    private FragmentManager fragmentManager;
+    private FragmentTransaction transaction;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,38 +81,54 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
 
     private void initialData() {
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-
+        fragmentManager = getSupportFragmentManager();
+        Bundle bundle = new Bundle(1);
+        bundle.putString("location", "서울");
+        bundle.putString("lat", "126.9783881,37.5666102");
+        item = new ItemFragment();
+        item.setArguments(bundle);
+        transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.Item_list, item).commitAllowingStateLoss();
     }
-
     private void initialView() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolBar = new ToolBarCustom(getSupportActionBar());
-        toolBar.setTitleText((TextView) findViewById(R.id.toolbar_title), "타이틀");
-
+        toolBar.setTitleText((TextView) findViewById(R.id.toolbar_title), R.string.app_name_kor);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        name = navigationView.getHeaderView(0).findViewById(R.id.textView_Name);
+        point = navigationView.getHeaderView(0).findViewById(R.id.textView_Mi);
+        tv_name = findViewById(R.id.main_name);
+        changeLogin();
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 //menuItem.setChecked(true);
                 mDrawerLayout.closeDrawers();
-
                 int id = menuItem.getItemId();
                 String title = menuItem.getTitle().toString();
-
-                if(id == R.id.account){
-                    Toast.makeText(context, title + ": 계정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
-                }
-                else if(id == R.id.setting){
-                    Toast.makeText(context, title + ": 설정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
-                }
-                else if(id == R.id.logout){
-                    Toast.makeText(context, title + ": 로그아웃 시도중", Toast.LENGTH_SHORT).show();
-                }
-                else if(id == R.id.order_List){
-                    Toast.makeText(context, title + ": 주문 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
+                switch (id){
+                    case R.id.account:
+                        Toast.makeText(context, title + ": 계정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.order_List:
+                        Toast.makeText(context, title + ": 주문 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.setting:
+                        Toast.makeText(context, title + ": 설정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.logout:
+                        //Toast.makeText(context, title + ": 로그아웃 시도중", Toast.LENGTH_SHORT).show();
+                        if (mLoginForm) {
+                            Intent intent = new Intent(context, LoginActivity.class);
+                            startActivityForResult(intent, result_login);
+                        } else { //로그아웃시도
+                            mLoginForm = true;
+                            changeLogin();
+                            user=null;
+                        }
+                        break;
                 }
                 return false;
             }
@@ -95,19 +136,32 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        //return super.onCreateOptionsMenu(menu);
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
     public void onListFragmentInteraction(ShopData data) { //점포 클릭시 적용
         Intent intent = new Intent(this, ShopActivity.class);
         intent.putExtra(Constant.shopdata, data);
         startActivity(intent);
-
         //Toast.makeText(this, "event "+item.content, Toast.LENGTH_SHORT).show();
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
+            case R.id.action_location:
+                //Toast.makeText(context, "내주변 버튼 클릭됨", Toast.LENGTH_LONG).show();
+                this.item.setLocation("대구", "128.583052,35.798838");
+                //enableMyLocation();
+                return true;
             case android.R.id.home:
                 //super.onBackPressed();
-                Toast.makeText(this, "서랍열기 ", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "서랍열기 ", Toast.LENGTH_SHORT).show();
+                //TODO:회원로그인시 내정보, 주문내역 활성화 및 로그인 로그아웃 전환
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
 
@@ -145,8 +199,7 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
                         if (task.isSuccessful()) {
                             mLastKnownLocation = (Location) task.getResult();
                             Log.d("mylocation", "Current location task:\n" + task.getResult());
-
-                            //TODO:행정구 reverselocation 받아오기 networktask 및 툴바에 표시
+                            myLocation(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()));
                             //toolBar.setTitleText((TextView) findViewById(R.id.toolbar_title), "타이틀");
                         } else {
                             Log.d(TAG, "Current location is null. Using defaults.");
@@ -157,6 +210,53 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
             }
         } catch(SecurityException e)  {
             Log.e("Exception: %s", e.getMessage());
+        }
+    }
+    private void myLocation(LatLng latLng){
+        NetworkTask nt = new NetworkTask(latLng);
+        //NetworkTask nt = new NetworkTask(mDefaultLocation);
+        try {
+            String str = nt.execute().get();
+            Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
+            toolBar.setTitleText((TextView) findViewById(R.id.toolbar_title), str);
+            //JSONObject jsonObj = new JSONObject(str);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+    private void changeLogin(){
+        if (mLoginForm){ //로그인되었는지 확인
+            navigationView.getMenu().findItem(R.id.logout).setTitle(getString(R.string.menu_login));
+            navigationView.getMenu().findItem(R.id.account).setEnabled(false);
+            navigationView.getMenu().findItem(R.id.order_List).setEnabled(false);
+            mLoginForm = true;
+            name.setText(getString(R.string.nav_header_title));
+            point.setText(getString(R.string.nav_header_subtitle));
+            tv_name.setText(getString(R.string.nav_header_title));
+        } else { //로그인성공
+            navigationView.getMenu().findItem(R.id.logout).setTitle(getString(R.string.menu_logout));
+            navigationView.getMenu().findItem(R.id.account).setEnabled(true);
+            navigationView.getMenu().findItem(R.id.order_List).setEnabled(true);
+            mLoginForm = false;
+            name.setText(user.getName());
+            tv_name.setText(user.getName()+"님 환영합니다.");
+            point.setText(""+user.getPoint());
+
+        }
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == result_login && resultCode == RESULT_OK) { //로그인 결과
+            if (data.hasExtra(login_state)) {
+                this.mLoginForm = !data.getBooleanExtra(login_state,false);
+                Log.d(TAG, "onActivityResult: "+mLoginForm);
+                changeLogin();
+            }
+
         }
     }
     @Override

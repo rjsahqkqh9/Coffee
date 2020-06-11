@@ -8,7 +8,7 @@
     android:paddingTop="20dp"
     android:paddingStart="30dp"
     android:paddingEnd="30dp"
-    android:background="@drawable/ic_launcher_background"
+    android:background="@color/colorWhite"
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
     android:orientation="vertical"
     android:gravity="bottom">
@@ -23,9 +23,11 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:padding="5dp"
-            android:text="사용자 이름"
-            android:textSize="25dp"
+            android:text="@string/nav_header_title"
+            android:textColor="@color/colorBrown"
+            android:textSize="25sp"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            tools:text="사용자이름"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -35,8 +37,10 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:padding="5dp"
-            android:text="마일리지"
-            android:textSize="25dp"
+            android:text="@string/nav_header_subtitle"
+            android:textColor="@color/colorBrown"
+            android:textSize="25sp"
+            tools:text="마일리지"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -48,7 +52,12 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            tools:srcCompat="@tools:sample/avatars" />
+            tools:srcCompat="@tools:sample/avatars"
+            android:contentDescription="@string/nav_header_desc" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
+    <View
+        android:id="@+id/view_line"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/colorBrown" />
 </LinearLayout>

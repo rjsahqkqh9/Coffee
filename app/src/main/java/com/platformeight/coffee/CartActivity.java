@@ -9,21 +9,31 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import static com.platformeight.coffee.Constant.cart;
+import static com.platformeight.coffee.Constant.cart_code;
+import static com.platformeight.coffee.Constant.cart_items;
+import static com.platformeight.coffee.Constant.format;
 
 public class CartActivity extends AppCompatActivity implements CartFragment.OnListFragmentInteractionListener{
+
     private String cart_list;
+
     private FragmentManager fragmentManager;
     private CartFragment CartFragment;
     private FragmentTransaction transaction;
+
+    private Button btn_pay;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,26 +44,50 @@ public class CartActivity extends AppCompatActivity implements CartFragment.OnLi
     }
 
     private void initialView() {
-        Button btn_pay = findViewById(R.id.cart_pay);
+        btn_pay = findViewById(R.id.cart_pay);
         btn_pay.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View view) {
-                CartFragment.getCart();
+                cart_list = CartFragment.getCart();
             }
         });
     }
 
     private void initialData() {
+        cart_list = getIntent().getStringExtra(cart_items);
+        try {
+            int price=0;
+            JSONArray ja = new JSONArray(cart_list);
+            for(int i=0;i<ja.length();i++){
+                JSONObject js = (JSONObject) ja.get(i);
+                price += js.getInt("amount")*js.getInt("price");
+            }
+            btn_pay.setText(String.format("%s원 결제하기", format.format(price)));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         fragmentManager = getSupportFragmentManager();
         Bundle bundle = new Bundle(1);
-        bundle.putString(cart, DummyCart());
+        bundle.putString(cart_items, cart_list);
+        //bundle.putString(cart_items, DummyCart());
         CartFragment = new CartFragment();
         CartFragment.setArguments(bundle);
         transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.cart_list, CartFragment).commitAllowingStateLoss();
-
+    }
+    @Override
+    public void onBackPressed() {
+        cart_list = CartFragment.getCart();
+        Intent result = new Intent();
+        result.putExtra(cart_items,cart_list);
+        setResult(RESULT_OK,result);
+        super.onBackPressed();
     }
 
+    @Override
+    public void onListFragmentInteraction(int price) {
+        btn_pay.setText(String.format("%s원 결제하기", format.format(price)));
+    }
     private String DummyCart(){
         JSONArray js_carts = new JSONArray();
         try {
@@ -72,118 +106,9 @@ public class CartActivity extends AppCompatActivity implements CartFragment.OnLi
             ja.put(js1);
             js_cart.put("opt",ja);
             js_carts.put(js_cart);
-
-            js_cart = new JSONObject();
-            js_cart.put("no",2);
-            js_cart.put("name","카페라떼");
-            js_cart.put("onum",1);
-            js_cart.put("amount",1);
-            js_cart.put("price",5800);
-            js_cart.put("base","ICE");
-            js_cart.put("ICE",5300);
-            ja = new JSONArray();
-            js1 = new JSONObject();
-            js1.put("샷추가",500);
-            ja.put(js1);
-            js_cart.put("opt",ja);
-            js_carts.put(js_cart);
-
-            js_cart = new JSONObject();
-            js_cart.put("no",3);
-            js_cart.put("name","카페라떼");
-            js_cart.put("onum",1);
-            js_cart.put("amount",1);
-            js_cart.put("price",5800);
-            js_cart.put("base","ICE");
-            js_cart.put("ICE",5300);
-            ja = new JSONArray();
-            js1 = new JSONObject();
-            js1.put("샷추가",500);
-            ja.put(js1);
-            js_cart.put("opt",ja);
-            js_carts.put(js_cart);
-
-            js_cart = new JSONObject();
-            js_cart.put("no",4);
-            js_cart.put("name","카페라떼");
-            js_cart.put("onum",1);
-            js_cart.put("amount",1);
-            js_cart.put("price",5800);
-            js_cart.put("base","ICE");
-            js_cart.put("ICE",5300);
-            ja = new JSONArray();
-            js1 = new JSONObject();
-            js1.put("샷추가",500);
-            ja.put(js1);
-            js_cart.put("opt",ja);
-            js_carts.put(js_cart);
-
-            js_cart = new JSONObject();
-            js_cart.put("no",5);
-            js_cart.put("name","카페라떼");
-            js_cart.put("onum",1);
-            js_cart.put("amount",1);
-            js_cart.put("price",5800);
-            js_cart.put("base","ICE");
-            js_cart.put("ICE",5300);
-            ja = new JSONArray();
-            js1 = new JSONObject();
-            js1.put("샷추가",500);
-            ja.put(js1);
-            js_cart.put("opt",ja);
-            js_carts.put(js_cart);
-
-            js_cart = new JSONObject();
-            js_cart.put("no",6);
-            js_cart.put("name","카페라떼");
-            js_cart.put("onum",1);
-            js_cart.put("amount",1);
-            js_cart.put("price",5800);
-            js_cart.put("base","ICE");
-            js_cart.put("ICE",5300);
-            ja = new JSONArray();
-            js1 = new JSONObject();
-            js1.put("샷추가",500);
-            ja.put(js1);
-            js_cart.put("opt",ja);
-            js_carts.put(js_cart);
-
-            js_cart = new JSONObject();
-            js_cart.put("no",7);
-            js_cart.put("name","카페라떼");
-            js_cart.put("onum",1);
-            js_cart.put("amount",1);
-            js_cart.put("price",5800);
-            js_cart.put("base","ICE");
-            js_cart.put("ICE",5300);
-            ja = new JSONArray();
-            js1 = new JSONObject();
-            js1.put("샷추가",500);
-            ja.put(js1);
-            js_cart.put("opt",ja);
-            js_carts.put(js_cart);
-
-            js_cart = new JSONObject();
-            js_cart.put("no",8);
-            js_cart.put("name","카페라떼");
-            js_cart.put("onum",1);
-            js_cart.put("amount",1);
-            js_cart.put("price",5800);
-            js_cart.put("base","ICE");
-            js_cart.put("ICE",5300);
-            ja = new JSONArray();
-            js1 = new JSONObject();
-            js1.put("샷추가",500);
-            ja.put(js1);
-            js_cart.put("opt",ja);
-            js_carts.put(js_cart);
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return js_carts.toString();
-    }
-    @Override
-    public void onListFragmentInteraction(JSONObject item) {
-
     }
 }

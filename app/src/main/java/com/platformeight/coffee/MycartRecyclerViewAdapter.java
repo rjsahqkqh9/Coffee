@@ -7,13 +7,10 @@ package com.platformeight.coffee;
 
 import android.annotation.SuppressLint;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,9 +23,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import static com.platformeight.coffee.Constant.format;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link DummyItem}.
@@ -61,7 +59,6 @@ public class MycartRecyclerViewAdapter extends RecyclerView.Adapter<MycartRecycl
         try {
             holder.mCartView.setText(holder.mItem.getString("name"));
             //JSONObject js = new JSONObject(holder.mItem.getString("base"));
-            DecimalFormat format = new DecimalFormat("###,###");
             String base = holder.mItem.getString("base");
             String info = String.format("- 기본 : %s (%s원)", base,format.format(holder.mItem.getInt(base)));
             JSONArray ja = new JSONArray(holder.mItem.getString("opt"));
@@ -84,6 +81,7 @@ public class MycartRecyclerViewAdapter extends RecyclerView.Adapter<MycartRecycl
                         holder.mCartQuanView.setText(String.format("%d 개", holder.count));
                         holder.price = holder.mItem.getInt("price")*holder.count;
                         holder.mCartPriceView.setText(String.format("%s원", format.format(holder.price)));
+                        calPrice();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -97,6 +95,7 @@ public class MycartRecyclerViewAdapter extends RecyclerView.Adapter<MycartRecycl
                         holder.mCartQuanView.setText(String.format("%d 개", holder.count));
                         holder.price = holder.mItem.getInt("price")*holder.count;
                         holder.mCartPriceView.setText(String.format("%s원", format.format(holder.price)));
+                        calPrice();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -107,11 +106,12 @@ public class MycartRecyclerViewAdapter extends RecyclerView.Adapter<MycartRecycl
                 public void onClick(View v) {
                     try {
                         Toast.makeText(v.getContext(), holder.mItem.getString("no")+" "+holder.mItem.getString("name")+"를 비웁니다.", Toast.LENGTH_SHORT).show();
+                        mValues.remove(position);
+                        calPrice();
+                        notifyDataSetChanged();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    mValues.remove(position);
-                    notifyDataSetChanged();
                 }
             });
 
@@ -122,12 +122,6 @@ public class MycartRecyclerViewAdapter extends RecyclerView.Adapter<MycartRecycl
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        holder.mView.setOnClickListener(new OnSingleClickListener() {
-            @Override
-            public void onSingleClick(View view) {
-                mListner.onListFragmentInteraction(holder.mItem);
-            }
-        });
 
     }
 
@@ -144,9 +138,16 @@ public class MycartRecyclerViewAdapter extends RecyclerView.Adapter<MycartRecycl
         Log.d("MycartRecycler", "getJson: "+ja.toString());
         return ja.toString();
     }
+    public void calPrice() throws JSONException {
+        int sum=0;
+        for (int i=0;i<mValues.size();i++){
+            sum += mValues.get(i).getInt("amount")*mValues.get(i).getInt("price");
+        }
+        mListner.onListFragmentInteraction(sum);
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View mView;
+        //public final View mView;
         public final TextView mCartView;
         public final TextView mCartInfoView;
         public final TextView mCartPriceView;
@@ -161,7 +162,7 @@ public class MycartRecyclerViewAdapter extends RecyclerView.Adapter<MycartRecycl
 
         public ViewHolder(View view) {
             super(view);
-            mView = view;
+            //mView = view;
             mCartView = (TextView) view.findViewById(R.id.cart_name);
             mCartInfoView = (TextView) view.findViewById(R.id.cart_info);
             mCartPriceView = (TextView) view.findViewById(R.id.cart_price);

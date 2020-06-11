@@ -29,7 +29,7 @@ public class ToolBarCustom {
         this.actionBar = action;
         actionBar.setDisplayShowTitleEnabled(false); // 기존 title 지우기
         actionBar.setDisplayHomeAsUpEnabled(true); // 뒤로가기 버튼 만들기
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_action_back_black); //뒤로가기 버튼 이미지 지정
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_baseline_menu_24);
     }
 
     public void setActionBar(ActionBar actionBar) {

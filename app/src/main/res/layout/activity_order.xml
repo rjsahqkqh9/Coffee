@@ -9,10 +9,11 @@
     android:orientation="vertical">
 
     <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:srcCompat="@tools:sample/avatars" />
+        android:id="@+id/order_menu_iamge"
+        android:layout_width="130dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:src="@drawable/menu_image" />
     <TextView
         android:id="@+id/order_menu_name"
         android:layout_width="match_parent"
@@ -35,20 +36,6 @@
             android:id="@+id/radioGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-            <RadioButton
-                android:id="@+id/radioButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/order_text_hot"
-                android:visibility="gone"
-                tools:visibility="visible"/>
-            <RadioButton
-                android:id="@+id/radioButton2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/order_text_ice"
-                android:visibility="gone"
-                tools:visibility="visible" />
 
         </RadioGroup>
         <LinearLayout

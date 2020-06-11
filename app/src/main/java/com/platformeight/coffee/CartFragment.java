@@ -25,7 +25,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.platformeight.coffee.Constant.cart;
+import static com.platformeight.coffee.Constant.cart_items;
 
 /**
  * A fragment representing a list of Items.
@@ -85,7 +85,7 @@ public class CartFragment extends Fragment {
 
             Bundle bundle = getArguments();
             if (bundle != null) {
-                cart_json = bundle.getString(cart);
+                cart_json = bundle.getString(cart_items);
             }
             Log.d(TAG, "cart json : "+ cart_json);
             List<JSONObject> cart = new ArrayList<JSONObject>();
@@ -138,6 +138,6 @@ public class CartFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnListFragmentInteractionListener {
-        void onListFragmentInteraction(JSONObject item);
+        void onListFragmentInteraction(int price);
     }
 }

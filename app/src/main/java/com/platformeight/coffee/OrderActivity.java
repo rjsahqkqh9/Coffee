@@ -2,7 +2,6 @@ package com.platformeight.coffee;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,11 +20,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
 
-import static com.platformeight.coffee.Constant.cart;
 import static com.platformeight.coffee.Constant.cart_code;
+import static com.platformeight.coffee.Constant.cart_item;
+import static com.platformeight.coffee.Constant.cart_items;
 
 public class OrderActivity extends AppCompatActivity {
 
@@ -39,22 +41,20 @@ public class OrderActivity extends AppCompatActivity {
 
     private TextView menuName;
     private TextView countText;
-    private TextView price_Shot;
 
-    private CheckBox add_Shot;
-
-    private RadioButton hot, ice;
     private RadioGroup radio_Group;
     private LinearLayout radio_price;
     private LinearLayout check_group;
     private LinearLayout check_price;
 
+    //private List<String> radio_id;
+
 
     private int count = 1;/*음료 기본수량*/
-    private int price = 0;
     private int base_num = 0;
     private int opt_num = 0;
 
+    private JSONArray cart_list;
     private JSONObject menu;
     private JSONObject base;
     private JSONObject opt;
@@ -70,8 +70,11 @@ public class OrderActivity extends AppCompatActivity {
     }
 
     private void initialData() {
+        //radio_id=new ArrayList<String>();
         try {
-            menu = new JSONObject(Objects.requireNonNull(getIntent().getStringExtra("menu")));
+            menu = new JSONObject(Objects.requireNonNull(getIntent().getStringExtra(Constant.menu)));
+            cart_list = new JSONArray(Objects.requireNonNull(getIntent().getStringExtra(cart_items)));
+
             menuName.setText(menu.getString("name"));
             base_num = menu.getInt("bnum");
             opt_num = menu.getInt("onum");
@@ -79,6 +82,7 @@ public class OrderActivity extends AppCompatActivity {
             JSONArray ja = new JSONArray(menu.getString("base"));
             base = ja.getJSONObject(0);
             //Log.d(TAG, "initialData: "+ base.names().getString(0));
+            int index=0;
             for(Iterator<String> itr = base.keys(); itr.hasNext();){
                 String str = itr.next();
                 TextView tv = new TextView(this);
@@ -93,9 +97,15 @@ public class OrderActivity extends AppCompatActivity {
 
                 RadioButton rb = new RadioButton(this);
                 rb.setText(str);
+                rb.setId(index);
+                Log.d(TAG, "initialData: "+rb.getId());
+                //radio_id.add(String.valueOf(rb.getId()));
                 radio_Group.addView(rb);
+                index++;
             }
-            radio_Group.check((int) 1);
+            radio_Group.check(radio_Group.getChildAt(0).getId());
+            Log.d(TAG, "initialData: "+radio_Group.getChildAt(0).getId());
+            //Log.d(TAG, "initialData: "+radio_id.get(0));
 
             ja = new JSONArray(menu.getString("opt"));
             opt = ja.getJSONObject(0);
@@ -167,7 +177,7 @@ public class OrderActivity extends AppCompatActivity {
             @Override
             public void onSingleClick(View view) {
                 //장바구니 상품정보 전송후 뒤로가기
-                Log.d(TAG, "cart_Button: " +store_cart());
+                //Log.d(TAG, "cart_Button: " +store_cart());
                 intent(false);
             }
         });
@@ -180,13 +190,61 @@ public class OrderActivity extends AppCompatActivity {
             public void onSingleClick(View view) {
                 //장바구니로
                 //if (!radio_Group.isSelected()) return;
-                Log.d(TAG, "pay_Button: " +store_cart());
+                //Log.d(TAG, "pay_Button: " +store_cart());
                 intent(true);
             }
         });
         /*결제 버튼 끝*/
     }
-    private String store_cart(){  //TODO:카트리스트에 현재 주문 추가
+    private String store_cart(){
+        try {
+            JSONObject js_cart = new JSONObject();
+            js_cart.put("no",cart_list.length()+1);
+            js_cart.put("name",(String) menuName.getText());
+            js_cart.put("onum",0);
+            js_cart.put("amount",count);
+            js_cart.put("price",0);
+            int i = radio_Group.getCheckedRadioButtonId();
+            //i = radio_id.indexOf(String.valueOf(radio_Group.getCheckedRadioButtonId()));
+            String str = base.names().getString(i);
+            js_cart.put("base",str);
+            js_cart.put( str,base.getInt(str));
+            JSONArray ja = new JSONArray();
+            JSONObject js1 = new JSONObject();
+            int onum=0;
+            int price=base.getInt(str);
+            for(i=1;i<=opt_num;i++){
+                CheckBox box = (CheckBox) check_group.getChildAt(i);
+                if (box.isChecked()) {
+                    onum++;
+                    str = opt.names().getString(i-1);
+                    js1.put(str,opt.getInt(str));
+                    price+=opt.getInt(str);
+                }
+            }
+            js_cart.put("onum",onum);
+            js_cart.put("price",price);
+            //js1.put("샷추가",500);
+            //js1.put("휘핑크림",300);
+            ja.put(js1);
+            js_cart.put("opt",ja);
+            cart_list.put(js_cart);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return cart_list.toString();
+    }
+    private void intent(boolean run_cart){
+        Intent result = new Intent();
+        String str = store_cart();
+        Log.d(TAG, run_cart+" cart_Button: " + str);
+        result.putExtra(cart_items,str);
+        result.putExtra(cart_code,run_cart);
+        setResult(RESULT_OK,result);
+        finish();
+    }
+
+    private String store_cart_sample(){
         String result = "";
         try {
             result = (String) menuName.getText();
@@ -204,12 +262,5 @@ public class OrderActivity extends AppCompatActivity {
         }
         result+= " 수량: "+count;
         return result;
-    }
-    private void intent(boolean run_cart){
-        Intent result = new Intent();
-        result.putExtra(cart,store_cart());
-        result.putExtra(cart_code,run_cart);
-        setResult(RESULT_OK,result);
-        finish();
     }
 }

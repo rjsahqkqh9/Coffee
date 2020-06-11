@@ -14,12 +14,20 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.platformeight.coffee.dummy.DummyContent;
 import com.platformeight.coffee.dummy.ShopContent;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A fragment representing a list of Items.
@@ -31,6 +39,7 @@ public class ItemFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+    private RecyclerView recyclerView;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -66,7 +75,7 @@ public class ItemFragment extends Fragment {
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
+            recyclerView = (RecyclerView) view;
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
@@ -74,13 +83,92 @@ public class ItemFragment extends Fragment {
             }
 
             //TODO:리스트 구성 3개 랜덤리스트 이후 거리순 open, close, state로 회색처리
-
-            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(ShopContent.ITEMS, mListener));
+            Bundle bundle = getArguments();
+            String shop_json = "";
+            if (bundle != null) {
+                shop_json = bundle.getString("location");
+            }
+            Log.d("itemFragment", "menu json : "+ shop_json);
+            //recyclerView.setAdapter(new MyItemRecyclerViewAdapter(ShopContent.ITEMS, mListener));
+            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(shopListSample(shop_json), mListener));
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(context,LinearLayoutManager.VERTICAL);
             //dividerItemDecoration.setDrawable(context.getResources().getDrawable(R.drawable.recyclerview_divider));
             recyclerView.addItemDecoration(dividerItemDecoration);
         }
         return view;
+    }
+
+    public void setLocation(String lo, String lat) {
+        //TODO: 현재지역 좌표값으로 데이터베이스 조회하여 리스트 생성
+        // 구단위 최상위 1개 랜덤리스트 3개 그외일반
+
+
+        recyclerView.setAdapter(new MyItemRecyclerViewAdapter(shopListSample(lo), mListener));
+    }
+    private List<ShopData> mValues;
+    private List<ShopData> shopListSample(String lo){
+        mValues = new ArrayList<ShopData>();
+        String menu = shopMenuSample();
+        mValues.add(new ShopData(String.valueOf(1), "image", lo+"vvip카페 " + 1, menu,1, "10:00", "17:00"));
+        mValues.add(new ShopData(String.valueOf(2), "image", lo+"vip카페 " + 1, menu,1, "10:00", "17:00"));
+        mValues.add(new ShopData(String.valueOf(3), "image", lo+"vip카페 " + 2, menu,1, "10:00", "17:00"));
+        mValues.add(new ShopData(String.valueOf(4), "image", lo+"vip카페 " + 3, menu,1, "10:00", "17:00"));
+        for (int no=1;no<=10;no++){
+            mValues.add(new ShopData(String.valueOf(no), "image", lo+"카페 " + no, menu,1, "10:00", "17:00"));
+        }
+        return mValues;
+    }
+    private String shopMenuSample(){
+        JSONArray js_menus = new JSONArray();
+        try {
+            JSONObject js_menu = new JSONObject();
+            JSONArray ja = new JSONArray();
+            JSONObject js1 = new JSONObject();
+            js_menu.put("name","아메리카노");
+            js_menu.put("image", "이미지주소값");
+            js_menu.put("bnum",2);
+            js_menu.put("onum",2);
+            //js_menu.put("hot",4300);
+            //js_menu.put("ice",5000);
+            //js_menu.put("basic",4300);
+            js1.put("HOT",4300);
+            js1.put("ICE",5000);
+            //js1.put("basic",4300);
+            ja.put(js1);
+            js_menu.put("base",ja);
+            ja = new JSONArray();
+            js1 = new JSONObject();
+            js1.put("샷추가",500);
+            js1.put("휘핑크림",300);
+            ja.put(js1);
+            js_menu.put("opt",ja);
+            js_menus.put(js_menu);
+
+            js_menu = new JSONObject();
+            ja = new JSONArray();
+            js1 = new JSONObject();
+            js_menu.put("name","카페라떼");
+            js_menu.put("image", "이미지주소값");
+            js_menu.put("bnum",2);
+            js_menu.put("onum",1);
+            //js_menu.put("hot",4300);
+            //js_menu.put("ice",5000);
+            //js_menu.put("basic",4300);
+            js1.put("HOT",4500);
+            js1.put("ICE",5300);
+            //js1.put("basic",4300);
+            ja.put(js1);
+            js_menu.put("base",ja);
+            ja = new JSONArray();
+            js1 = new JSONObject();
+            js1.put("샷추가",500);
+            ja.put(js1);
+            js_menu.put("opt",ja);
+            js_menus.put(js_menu);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return js_menus.toString();
     }
     @Override
     public void onAttach(Context context) {

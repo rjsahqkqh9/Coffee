@@ -12,11 +12,11 @@ public class MemberData {
 
     private String name;
 
-    private String email;
+    private String email; // id대용
 
-    private String pass;
+    private String pass; //10~20자이내
 
-    private String phone;
+    private String phone; //본인인증
 
     private int point;
 

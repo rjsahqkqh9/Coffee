@@ -21,12 +21,11 @@ public class MyApplication extends Application {
     private void initializeData() {
         //설정 읽어오기 user 자동로그인
         user = new MemberData();
-        //autologin();
+        autologin();
     }
 
 
     private static final String AUTOLOGIN = "autologin";
-    /*
     private void autologin() {
         //휴대폰내 로그인정보 읽어오기
         //SharedPreference.removeAllAttribute(this);
@@ -34,14 +33,16 @@ public class MyApplication extends Application {
             String id = SharedPreference.getAttribute(this, "ID");
             Log.d(AUTOLOGIN, "member_id : "+id);
             String pass = SharedPreference.getAttribute(this, "PASS");
-            if (id.length()>0&&pass.length()>0){
+
+        } else Log.d(AUTOLOGIN, "login data empty");
+    }
+
+    /*
+    if (id.length()>0&&pass.length()>0){
                 MemberHandle member = new MemberHandle(this);
                 boolean result = member.login(id,pass);
                 if (!result) Log.e(AUTOLOGIN, " failure" );
             }
-        } else Log.d(AUTOLOGIN, "login data empty");
-    }
-
      */
 
 }

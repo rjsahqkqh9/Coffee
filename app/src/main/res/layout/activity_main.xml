@@ -17,6 +17,7 @@
             <TextView
                 android:id="@+id/toolbar_title"
                 android:text="toolbar_title"
+                android:textColor="@color/colorBrown"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
@@ -26,10 +27,10 @@
             android:id="@+id/view_toolbar"
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:background="@android:color/black"
+            android:background="@color/colorBrown"
             android:layout_below="@+id/toolbar"/>
         <TextView
-            android:id="@+id/text"
+            android:id="@+id/main_name"
             android:text="user's name님 (혹은 로그인)"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -38,8 +39,8 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
-        <fragment
-            android:id="@+id/list"
+        <FrameLayout
+            android:id="@+id/Item_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             class="com.platformeight.coffee.ItemFragment"
