@@ -19,14 +19,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.platformeight.coffee.dummy.DummyContent;
-import com.platformeight.coffee.dummy.ShopContent;
+import com.google.android.gms.maps.model.LatLng;
+import com.platformeight.coffee.servertask.ServerHandle;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -84,28 +85,44 @@ public class ItemFragment extends Fragment {
 
             //TODO:리스트 구성 3개 랜덤리스트 이후 거리순 open, close, state로 회색처리
             Bundle bundle = getArguments();
-            String shop_json = "";
+            String location = "";
+            LatLng lat = null;
             if (bundle != null) {
-                shop_json = bundle.getString("location");
+                location = bundle.getString("location");
+                lat = new LatLng(bundle.getDouble("latx"),bundle.getDouble("laty"));
             }
-            Log.d("itemFragment", "menu json : "+ shop_json);
+            //Log.d("itemFragment", "location : "+ location);
             //recyclerView.setAdapter(new MyItemRecyclerViewAdapter(ShopContent.ITEMS, mListener));
-            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(shopListSample(shop_json), mListener));
+            //recyclerView.setAdapter(new MyItemRecyclerViewAdapter(shopListSample(location), mListener));
+            setLocation(location, lat);
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(context,LinearLayoutManager.VERTICAL);
             //dividerItemDecoration.setDrawable(context.getResources().getDrawable(R.drawable.recyclerview_divider));
             recyclerView.addItemDecoration(dividerItemDecoration);
         }
         return view;
     }
-
-    public void setLocation(String lo, String lat) {
+    private List<ShopData> mValues;
+    public void setLocation(String lo, LatLng latLng) { //임시, 좌표값
         //TODO: 현재지역 좌표값으로 데이터베이스 조회하여 리스트 생성
         // 구단위 최상위 1개 랜덤리스트 3개 그외일반
-
-
-        recyclerView.setAdapter(new MyItemRecyclerViewAdapter(shopListSample(lo), mListener));
+        mValues = new ArrayList<ShopData>();
+        //latLng = new LatLng(35.798838,128.583052);
+        Log.d("setLocation", "lat:"+ latLng.latitude+ ", long: "+ latLng.longitude);
+        mValues = new ServerHandle().getShopList(lo, latLng);
+        if (mValues==null) {
+            Log.d("setLocation", "mValues : null");
+        } else {
+            Collections.sort(mValues, new ShopListComparator());
+        }
+        //recyclerView.setAdapter(new MyItemRecyclerViewAdapter(shopListSample(lo), mListener));
+        recyclerView.setAdapter(new MyItemRecyclerViewAdapter(mValues, mListener));
     }
-    private List<ShopData> mValues;
+    private List<ShopData> shopList(){
+        mValues = new ArrayList<ShopData>();
+        String menu = "";
+        mValues.add(new ShopData(String.valueOf(1), "image", "vvip카페 " + 1, menu,1, "10:00", "17:00"));
+        return mValues;
+    }
     private List<ShopData> shopListSample(String lo){
         mValues = new ArrayList<ShopData>();
         String menu = shopMenuSample();

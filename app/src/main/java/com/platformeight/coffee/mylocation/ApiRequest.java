@@ -51,8 +51,8 @@ public class ApiRequest {
         String clientSecret = "tIFcSC0hs3B2vJd45gppVgrWtuNzyYbRz4D7HL5m"; //애플리케이션 클라이언트 시크릿값"
 
         //String position = "126.9783881,37.5666102"; //서울 중구 (서울시청)
-        String position = "128.583052,35.798838"; //대구광역시 달서구
-        //String position = latLng.longitude+","+latLng.latitude;
+        //String position = "128.583052,35.798838"; //대구광역시 달서구
+        String position = latLng.longitude+","+latLng.latitude;
         //String apiURL = "https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query="+text+"&coordinate=37.5666102, 126.9683881";    // json 결과
         String apiURL = "https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc?request=coordsToaddr&coords="+position+"&sourcecrs=epsg:4326&output=json&orders=addr,admcode";    // json 결과
         Map<String, String> requestHeaders = new HashMap<>();
@@ -60,9 +60,10 @@ public class ApiRequest {
         requestHeaders.put("X-NCP-APIGW-API-KEY", clientSecret);
 
         String responseBody = get(apiURL,requestHeaders);
-        Log.d(TAG, "gps() : "+responseBody);
+        Log.d(TAG, "gps location code : "+responseBody);
         try {
             JSONObject jsonObj = new JSONObject(responseBody);
+            if(jsonObj.getJSONObject("status").getString("name")!="ok") return "서비스외지역";
             JSONArray array1 = new JSONArray(String.valueOf(jsonObj.get("results")));
             JSONObject obj1 = array1.getJSONObject(0);
             JSONObject obj2 = obj1.getJSONObject("region");

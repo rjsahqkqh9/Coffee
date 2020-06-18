@@ -49,6 +49,7 @@ public class LoginActivity extends AppCompatActivity {
         final EditText usernameEditText = findViewById(R.id.username);
         final EditText passwordEditText = findViewById(R.id.password);
         final Button loginButton = findViewById(R.id.login);
+        final Button registerButton = findViewById(R.id.register);
         final ProgressBar loadingProgressBar = findViewById(R.id.loading);
 
         loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
@@ -78,10 +79,10 @@ public class LoginActivity extends AppCompatActivity {
                     showLoginFailed(loginResult.getError());
                 }
                 if (loginResult.getSuccess() != null) {
+                    //Complete and destroy login activity once successful
                     updateUiWithUser(loginResult.getSuccess());
+                    finish();
                 }
-                //Complete and destroy login activity once successful
-                finish();
             }
         });
 
@@ -124,16 +125,20 @@ public class LoginActivity extends AppCompatActivity {
                         passwordEditText.getText().toString());
             }
         });
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void updateUiWithUser(LoggedInUserView model) {
-        String welcome = getString(R.string.welcome) + model.getDisplayName();
+        String welcome = model.getDisplayName() + getString(R.string.welcome);
         // TODO : initiate successful logged in experience 로그인성공시
         Intent result = new Intent();
         result.putExtra(login_state, true);
-        user.setEmail(model.getId());
-        user.setName(model.getDisplayName());
-        user.setPoint(model.getPoint());
         setResult(Activity.RESULT_OK, result);
         Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
     }

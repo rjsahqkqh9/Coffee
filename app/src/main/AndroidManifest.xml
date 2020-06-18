@@ -17,7 +17,13 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/aa_launcher_round"
         android:supportsRtl="true"
+        android:theme="@style/NoTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <service
+            android:name=".FCMService"
+            android:enabled="true"
+            android:exported="true"></service>
+
         <activity
             android:name=".IntroActivity"
             android:screenOrientation="portrait"
@@ -28,22 +34,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MainActivity"
-            android:theme="@style/NoTheme" />
-        <activity
-            android:name=".ShopActivity"
-            android:theme="@style/NoTheme" />
-        <activity
-            android:name=".OrderActivity"
-            android:theme="@style/NoTheme" />
-        <activity
-            android:name=".CartActivity"
-            android:theme="@style/NoTheme" />
+        <activity android:name=".MainActivity" />
+        <activity android:name=".MyOrdersActivity" />
+        <activity android:name=".ShopActivity" />
+        <activity android:name=".OrderActivity" />
+        <activity android:name=".CartActivity" />
         <activity
             android:name=".ui.login.LoginActivity"
-            android:label="@string/title_activity_login"
-            android:theme="@style/NoTheme"/>
+            android:label="@string/title_activity_login" />
+        <activity
+            android:name=".ui.login.RegisterActivity"
+            android:label="@string/title_activity_login" /> <!-- [START firebase_service] -->
+        <service
+            android:name=".java.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

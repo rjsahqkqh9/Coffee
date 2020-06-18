@@ -36,7 +36,7 @@ public class IntroActivity extends AppCompatActivity {
         setContentView(R.layout.activity_intro);
         Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler());
 
-        checkVersion();
+        //checkVersion();
         run();
     }
     private void run(){

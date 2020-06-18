@@ -9,12 +9,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import com.google.gson.JsonArray;
+import com.platformeight.coffee.servertask.ServerHandle;
+import com.platformeight.coffee.ui.login.LoginActivity;
+import com.platformeight.coffee.ui.login.RegisterActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,16 +29,22 @@ import org.json.JSONObject;
 import static com.platformeight.coffee.Constant.cart_code;
 import static com.platformeight.coffee.Constant.cart_items;
 import static com.platformeight.coffee.Constant.format;
+import static com.platformeight.coffee.MyApplication.Main;
+import static com.platformeight.coffee.MyApplication.mLoginForm;
+import static com.platformeight.coffee.MyApplication.user;
 
 public class CartActivity extends AppCompatActivity implements CartFragment.OnListFragmentInteractionListener{
 
     private String cart_list;
+    private ShopData shop;
 
     private FragmentManager fragmentManager;
     private CartFragment CartFragment;
     private FragmentTransaction transaction;
 
     private Button btn_pay;
+    private int price;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,15 +60,50 @@ public class CartActivity extends AppCompatActivity implements CartFragment.OnLi
         btn_pay.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View view) {
+                if (user.getNo()<1){
+                    Toast.makeText(context, "로그인 혹은 회원가입을 해주세요", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(Main, LoginActivity.class);
+                    startActivity(intent);
+                    return;
+                } else {
+                    mLoginForm=false;
+                    Main.changeLogin();
+                }
                 cart_list = CartFragment.getCart();
+                try {
+                    JSONObject js_menu = new JSONObject();
+                    JSONArray ja = new JSONArray(cart_list);
+                    js_menu.put("shop_no", shop.getNo());
+                    js_menu.put("member_no", user.getNo());
+                    js_menu.put("order_amount", ja.length());
+                    js_menu.put("order_price", price);
+                    //TODO:마일리지포인트 사용 처리
+                    js_menu.put("order_point", 0);
+                    js_menu.put("total_price", price);// price-point
+                    js_menu.put("order_time", "2020/05/16/15:38");
+                    js_menu.put("detail", ja.toString());
+                    // TODO:결제페이지로 토스
+                    //test
+                    Log.d("", "sendOrder: "+js_menu.toString());
+                    if ( new ServerHandle().sendOrder(js_menu) ){
+                        finish();
+                    } else {
+                        Toast.makeText(CartActivity.this, "connection error", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
             }
         });
     }
 
     private void initialData() {
+        this.context = this;
+        price=0;
         cart_list = getIntent().getStringExtra(cart_items);
+        shop = (ShopData) getIntent().getSerializableExtra(Constant.shopdata);
         try {
-            int price=0;
             JSONArray ja = new JSONArray(cart_list);
             for(int i=0;i<ja.length();i++){
                 JSONObject js = (JSONObject) ja.get(i);
@@ -86,29 +133,7 @@ public class CartActivity extends AppCompatActivity implements CartFragment.OnLi
 
     @Override
     public void onListFragmentInteraction(int price) {
+        this.price = price;
         btn_pay.setText(String.format("%s원 결제하기", format.format(price)));
-    }
-    private String DummyCart(){
-        JSONArray js_carts = new JSONArray();
-        try {
-            JSONObject js_cart = new JSONObject();
-            js_cart.put("no",1);
-            js_cart.put("name","아메리카노");
-            js_cart.put("onum",2);
-            js_cart.put("amount",2);
-            js_cart.put("price",5100);
-            js_cart.put("base","HOT");
-            js_cart.put("HOT",4300);
-            JSONArray ja = new JSONArray();
-            JSONObject js1 = new JSONObject();
-            js1.put("샷추가",500);
-            js1.put("휘핑크림",300);
-            ja.put(js1);
-            js_cart.put("opt",ja);
-            js_carts.put(js_cart);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return js_carts.toString();
     }
 }

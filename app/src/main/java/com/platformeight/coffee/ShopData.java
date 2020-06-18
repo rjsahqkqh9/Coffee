@@ -5,6 +5,8 @@
 
 package com.platformeight.coffee;
 
+import com.google.gson.JsonObject;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -41,6 +43,8 @@ public class ShopData implements Serializable {
     // 좌표y
     private Double mapy;
 
+    private Double distance;
+
     // 영업시작시간
     private LocalTime shopOpen;
 
@@ -49,6 +53,8 @@ public class ShopData implements Serializable {
 
     // 등급
     private int promotion;
+
+    private String rest_date;
 
     public ShopData(String no, String image, String name, int state, String shopOpen, String shopClose) { //itemfragment 리스트용
         //리스트에 출력
@@ -66,12 +72,40 @@ public class ShopData implements Serializable {
         this.no = Integer.parseInt(no);
         this.image = image;
         this.name = name;
+
+        //영업중인지 확인
+        this.state = state;
+        this.shopOpen = LocalTime.parse(shopOpen);
+        this.shopClose = LocalTime.parse(shopClose);
+    }
+    public ShopData(String no, String image, String name, String menu, int state, String shopOpen, String shopClose, double mapx, double mapy) { //itemfragment 리스트용
+        //리스트에 출력
+        this.no = Integer.parseInt(no);
+        this.image = image;
+        this.name = name;
         this.menu = menu;
 
         //영업중인지 확인
         this.state = state;
         this.shopOpen = LocalTime.parse(shopOpen);
         this.shopClose = LocalTime.parse(shopClose);
+        this.mapx = mapx;
+        this.mapy = mapy;
+    }
+    public ShopData(String no, String image, String name, String menu, int state, String shopOpen, String shopClose, double mapx, double mapy, double distance) { //itemfragment 리스트용
+        //리스트에 출력
+        this.no = Integer.parseInt(no);
+        this.image = image;
+        this.name = name;
+        this.menu = menu;
+
+        //영업중인지 확인
+        this.state = state;
+        this.shopOpen = LocalTime.parse(shopOpen);
+        this.shopClose = LocalTime.parse(shopClose);
+        this.mapx = mapx;
+        this.mapy = mapy;
+        this.distance = distance;
     }
 
     public int getNo() {
@@ -146,6 +180,14 @@ public class ShopData implements Serializable {
         this.mapy = mapy;
     }
 
+    public Double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(Double distance) {
+        this.distance = distance;
+    }
+
     public LocalTime getShopOpen() {
         return shopOpen;
     }
@@ -160,6 +202,23 @@ public class ShopData implements Serializable {
 
     public void setShopClose(LocalTime shopClose) {
         this.shopClose = shopClose;
+    }
+
+    public JSONObject toJson() {
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("no",no);
+            obj.put("iamge",image);
+            obj.put("name",name);
+            obj.put("menu",menu);
+            obj.put("state",state);
+            obj.put("shopOpen",shopOpen);
+            obj.put("shopClose",shopClose);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return obj;
     }
 
     // Shop 모델 복사

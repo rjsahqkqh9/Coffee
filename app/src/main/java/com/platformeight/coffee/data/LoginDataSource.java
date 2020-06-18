@@ -5,9 +5,14 @@
 
 package com.platformeight.coffee.data;
 
+import android.util.Log;
+
 import com.platformeight.coffee.data.model.LoggedInUser;
+import com.platformeight.coffee.servertask.ServerHandle;
 
 import java.io.IOException;
+
+import static com.platformeight.coffee.MyApplication.user;
 
 /**
  * Class that handles authentication w/ login credentials and retrieves user information.
@@ -18,10 +23,16 @@ public class LoginDataSource {
 
         try {
             // TODO: handle loggedInUser authentication 로그인 인증 처리
+            String result = new ServerHandle().login(username,password);
+            Log.d("LoginDataSource", "login: "+result);
+            if (user.getNo()<1)  throw new Exception("No such as");
+            LoggedInUser fakeUser = new LoggedInUser(java.util.UUID.randomUUID().toString(), user.getName());
+            /*
             LoggedInUser fakeUser =
                     new LoggedInUser(
                             java.util.UUID.randomUUID().toString(),
-                            "Jane Doe");
+                            "fakeuser");
+             */
             return new Result.Success<>(fakeUser);
         } catch (Exception e) {
             return new Result.Error(new IOException("Error logging in", e));

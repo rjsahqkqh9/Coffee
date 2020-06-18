@@ -28,6 +28,7 @@ import static com.platformeight.coffee.Constant.cart_code;
 import static com.platformeight.coffee.Constant.menu;
 import static com.platformeight.coffee.Constant.result_cart;
 import static com.platformeight.coffee.Constant.result_order;
+import static com.platformeight.coffee.Constant.shopdata;
 
 public class ShopActivity extends AppCompatActivity implements MenuFragment.OnListFragmentInteractionListener{
     private ShopData shop;
@@ -60,6 +61,7 @@ public class ShopActivity extends AppCompatActivity implements MenuFragment.OnLi
             public void onSingleClick(View view) {
                 //toggleFab();
                 Intent intent = new Intent(getApplicationContext(), CartActivity.class);
+                intent.putExtra(shopdata, shop);
                 intent.putExtra(cart_items, cart_list);
                 startActivityForResult(intent, result_cart);
             }
@@ -101,6 +103,7 @@ public class ShopActivity extends AppCompatActivity implements MenuFragment.OnLi
                 Log.d("ShopActivity", "onActivityResult: " + this.cart_list);
                 if (data.getBooleanExtra(cart_code, false)) {//장바구니 실행
                     Intent intent = new Intent(this, CartActivity.class);
+                    intent.putExtra(shopdata,shop);
                     intent.putExtra(cart_items, cart_list);
                     startActivityForResult(intent, result_cart);
                 } else { //fab_cart animation

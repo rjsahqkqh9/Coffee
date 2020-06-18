@@ -42,7 +42,7 @@ public class LoginViewModel extends ViewModel {
             LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
             //loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
             //TODO: display 수정
-            loginResult.setValue(new LoginResult(new LoggedInUserView(data.getUserId(),data.getDisplayName(), 0)));
+            loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
         } else {
             loginResult.setValue(new LoginResult(R.string.login_failed));
         }
@@ -63,15 +63,18 @@ public class LoginViewModel extends ViewModel {
         if (username == null) {
             return false;
         }
+        /*
         if (username.contains("@")) {
             return Patterns.EMAIL_ADDRESS.matcher(username).matches();
         } else {
             return !username.trim().isEmpty();
         }
+         */
+        return !username.trim().isEmpty();
     }
 
     // A placeholder password validation check
     private boolean isPasswordValid(String password) {
-        return password != null && password.trim().length() > 5;
+        return password != null && password.trim().length() > 7;
     }
 }

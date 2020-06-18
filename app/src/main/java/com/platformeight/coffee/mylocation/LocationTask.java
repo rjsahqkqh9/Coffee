@@ -12,7 +12,7 @@ import com.google.android.gms.maps.model.LatLng;
 import org.json.JSONObject;
 
 
-public class NetworkTask extends AsyncTask<Void, Void, String> {
+public class LocationTask extends AsyncTask<Void, Void, String> {
 
     private LatLng latLng;
     private String url;
@@ -20,13 +20,13 @@ public class NetworkTask extends AsyncTask<Void, Void, String> {
     double atitude;
     double latitude;
 
-    public NetworkTask(){
+    public LocationTask(){
 
     }
-    public NetworkTask(LatLng latLng){
+    public LocationTask(LatLng latLng){
         this.latLng = latLng;
     }
-    public NetworkTask(double atitude, double latitude) {
+    public LocationTask(double atitude, double latitude) {
         this.atitude = atitude;
         this.latitude = latitude;
     }
