@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:name=".MyApplication"
@@ -19,10 +20,21 @@
         android:supportsRtl="true"
         android:theme="@style/NoTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <service
-            android:name=".FCMService"
+        <receiver
+            android:name=".service.AlarmReceiver"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_baseline_notifications_none_24" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorBrown" />
 
         <activity
             android:name=".IntroActivity"
@@ -34,7 +46,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
+        <activity android:name=".MainActivity">
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="coffee-20d55.firebaseapp.com"
+                    android:scheme="http" />
+                <data
+                    android:host="coffee-20d55.firebaseapp.com"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
         <activity android:name=".MyOrdersActivity" />
         <activity android:name=".ShopActivity" />
         <activity android:name=".OrderActivity" />
@@ -45,9 +71,7 @@
         <activity
             android:name=".ui.login.RegisterActivity"
             android:label="@string/title_activity_login" /> <!-- [START firebase_service] -->
-        <service
-            android:name=".java.MyFirebaseMessagingService"
-            android:exported="false">
+        <service android:name=".service.FCMService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>

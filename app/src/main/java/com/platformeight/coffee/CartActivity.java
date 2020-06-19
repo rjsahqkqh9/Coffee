@@ -86,6 +86,7 @@ public class CartActivity extends AppCompatActivity implements CartFragment.OnLi
                     //test
                     Log.d("", "sendOrder: "+js_menu.toString());
                     if ( new ServerHandle().sendOrder(js_menu) ){
+                        new ServerHandle().sendFCM(shop.getNo(),"coffee_shops");
                         finish();
                     } else {
                         Toast.makeText(CartActivity.this, "connection error", Toast.LENGTH_SHORT).show();

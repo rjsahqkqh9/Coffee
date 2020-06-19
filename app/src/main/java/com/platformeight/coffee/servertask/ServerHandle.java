@@ -29,6 +29,7 @@ import static com.platformeight.coffee.Constant.order_insert_success;
 import static com.platformeight.coffee.Constant.orderlist_user;
 import static com.platformeight.coffee.Constant.register_failure;
 import static com.platformeight.coffee.Constant.register_success;
+import static com.platformeight.coffee.Constant.server_name;
 import static com.platformeight.coffee.Constant.shoplist_select;
 
 public class ServerHandle {
@@ -147,6 +148,31 @@ public class ServerHandle {
         return result.contains(register_success);
     }
 
+    public String setToken(int no, String table, String token){
+        url = local_name+"token_update.php";
+        json = new JSONObject();
+        try {
+            json.put("no", no);
+            json.put("table", table);
+            json.put("token", token);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        NetworkTask networkTask = new NetworkTask(url, json);
+        String result = null;
+        try {
+            result = networkTask.execute().get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        if (result.contains(register_failure)){
+            Log.d(TAG, "register sql query: "+result);
+        }else if (result.contains("failure")){
+            Log.d(TAG, "register connection : "+result);
+        }
+        return result;
+    }
+
     /*
     * 가게관련
      */
@@ -223,6 +249,25 @@ public class ServerHandle {
         return result.contains(order_insert_success);
     }
 
+    public boolean sendFCM(int no, String table) {
+        url = server_name+"fcm test.php";
+        json = new JSONObject();
+        try {
+            json.put("no", no);
+            json.put("table", table);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        NetworkTask networkTask = new NetworkTask(url, json);
+        String result = null;
+        try {
+            result = networkTask.execute().get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        Log.d(TAG, "sendFCM: "+result);
+        return !result.contains("failure");
+    }
     public String getOrderList(int no, int state) {
         url = local_name+"orderlist_user.php";
         json = new JSONObject();
@@ -276,4 +321,5 @@ public class ServerHandle {
         Log.d(TAG, "parserShop: "+mValues.size());
         return mValues;
     }
+
 }

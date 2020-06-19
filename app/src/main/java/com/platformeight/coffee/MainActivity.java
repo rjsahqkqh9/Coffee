@@ -17,6 +17,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -37,6 +38,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.platformeight.coffee.mylocation.LocationTask;
 import com.platformeight.coffee.servertask.ServerHandle;
+import com.platformeight.coffee.service.FCMService;
 import com.platformeight.coffee.ui.login.LoginActivity;
 
 import java.util.concurrent.ExecutionException;
@@ -74,11 +76,11 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
 
         //test developer login
         new ServerHandle().login("kyg1084", "rlawjdgns");
+
         if ( user.getNo() > 0 ) mLoginForm = false;
         initialView();
         initialData();
     }
-
     private void initialData() {
         MyApplication.Main = this;
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
@@ -94,25 +96,6 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
         transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.Item_list, item).commitAllowingStateLoss();
 
-        FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                        if (!task.isSuccessful()) {
-                            Log.w(TAG, "getInstanceId failed", task.getException());
-                            return;
-                        }
-
-                        // Get new Instance ID token
-                        String token = task.getResult().getToken();
-
-                        // Log and toast
-                        String msg = getString(R.string.msg_token_fmt, token);
-                        Log.d(TAG, msg);
-                        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
-                    }
-                });
-        
     }
 
     private void initialView() {
@@ -287,9 +270,32 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
                 mLoginForm = !data.getBooleanExtra(login_state,false);
                 Log.d(TAG, "onActivityResult: "+mLoginForm);
                 changeLogin();
+                getToken("coffee_members");
             }
 
         }
+    }
+    private void getToken(String table) {
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "getInstanceId failed", task.getException());
+                            return;
+                        }
+
+                        // Get new Instance ID token
+                        String token = task.getResult().getToken();
+
+                        // Log and toast
+                        String msg = getString(R.string.msg_token_fmt, token);
+                        Log.d(TAG, msg);
+                        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+                        //msg = new ServerHandle().setToken(user.getNo(),table,token);
+                        //Log.d(TAG, msg);
+                    }
+                });
     }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
