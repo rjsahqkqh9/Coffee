@@ -22,11 +22,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DecimalFormat;
 import java.util.Iterator;
 import java.util.List;
 
-import static com.platformeight.coffee.Constant.format;
+import static com.platformeight.coffee.Constant.DECIMAL_FORMAT;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link DummyItem}.
@@ -60,18 +59,18 @@ public class MycartRecyclerViewAdapter extends RecyclerView.Adapter<MycartRecycl
             holder.mCartView.setText(holder.mItem.getString("name"));
             //JSONObject js = new JSONObject(holder.mItem.getString("base"));
             String base = holder.mItem.getString("base");
-            String info = String.format("- 기본 : %s (%s원)", base,format.format(holder.mItem.getInt(base)));
+            String info = String.format("- 기본 : %s (%s원)", base, DECIMAL_FORMAT.format(holder.mItem.getInt(base)));
             JSONArray ja = new JSONArray(holder.mItem.getString("opt"));
             JSONObject opt = ja.getJSONObject(0);
             for(Iterator<String> itr = opt.keys(); itr.hasNext();){
                 String str = itr.next();
-                info += "\n" + String.format("- "+str+" : +%s원", format.format(opt.getInt(str)));
+                info += "\n" + String.format("- "+str+" : +%s원", DECIMAL_FORMAT.format(opt.getInt(str)));
             }
             holder.mCartInfoView.setText(info);
             holder.count = holder.mItem.getInt("amount");
             holder.mCartQuanView.setText(String.format("%d 개", holder.count));
             holder.price = holder.mItem.getInt("price")*holder.count;
-            holder.mCartPriceView.setText(String.format("%s원", format.format(holder.price)));
+            holder.mCartPriceView.setText(String.format("%s원", DECIMAL_FORMAT.format(holder.price)));
             holder.mCartMinsView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -80,7 +79,7 @@ public class MycartRecyclerViewAdapter extends RecyclerView.Adapter<MycartRecycl
                         holder.mItem.put("amount",--holder.count);
                         holder.mCartQuanView.setText(String.format("%d 개", holder.count));
                         holder.price = holder.mItem.getInt("price")*holder.count;
-                        holder.mCartPriceView.setText(String.format("%s원", format.format(holder.price)));
+                        holder.mCartPriceView.setText(String.format("%s원", DECIMAL_FORMAT.format(holder.price)));
                         calPrice();
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -94,7 +93,7 @@ public class MycartRecyclerViewAdapter extends RecyclerView.Adapter<MycartRecycl
                         holder.mItem.put("amount",++holder.count);
                         holder.mCartQuanView.setText(String.format("%d 개", holder.count));
                         holder.price = holder.mItem.getInt("price")*holder.count;
-                        holder.mCartPriceView.setText(String.format("%s원", format.format(holder.price)));
+                        holder.mCartPriceView.setText(String.format("%s원", DECIMAL_FORMAT.format(holder.price)));
                         calPrice();
                     } catch (JSONException e) {
                         e.printStackTrace();

@@ -17,18 +17,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.google.gson.JsonArray;
 import com.platformeight.coffee.servertask.ServerHandle;
 import com.platformeight.coffee.ui.login.LoginActivity;
-import com.platformeight.coffee.ui.login.RegisterActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import static com.platformeight.coffee.Constant.cart_code;
-import static com.platformeight.coffee.Constant.cart_items;
-import static com.platformeight.coffee.Constant.format;
+import static com.platformeight.coffee.Constant.CART_ITEMS;
+import static com.platformeight.coffee.Constant.DECIMAL_FORMAT;
 import static com.platformeight.coffee.MyApplication.Main;
 import static com.platformeight.coffee.MyApplication.mLoginForm;
 import static com.platformeight.coffee.MyApplication.user;
@@ -80,17 +77,18 @@ public class CartActivity extends AppCompatActivity implements CartFragment.OnLi
                     //TODO:마일리지포인트 사용 처리
                     js_menu.put("order_point", 0);
                     js_menu.put("total_price", price);// price-point
-                    js_menu.put("order_time", "2020/05/16/15:38");
+                    //js_menu.put("order_time", "2020/05/16/15:38"); //db상 처리
                     js_menu.put("detail", ja.toString());
                     // TODO:결제페이지로 토스
                     //test
                     Log.d("", "sendOrder: "+js_menu.toString());
                     if ( new ServerHandle().sendOrder(js_menu) ){
-                        new ServerHandle().sendFCM(shop.getNo(),"coffee_shops");
-                        finish();
+                        new ServerHandle().sendFCM(shop.getNo(),"coffee_shops","주문왔습니다.");
+                        finishAffinity(); //주문처리과정 일괄정리
                     } else {
                         Toast.makeText(CartActivity.this, "connection error", Toast.LENGTH_SHORT).show();
                     }
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -102,21 +100,21 @@ public class CartActivity extends AppCompatActivity implements CartFragment.OnLi
     private void initialData() {
         this.context = this;
         price=0;
-        cart_list = getIntent().getStringExtra(cart_items);
-        shop = (ShopData) getIntent().getSerializableExtra(Constant.shopdata);
+        cart_list = getIntent().getStringExtra(CART_ITEMS);
+        shop = (ShopData) getIntent().getSerializableExtra(Constant.SHOP_DATA);
         try {
             JSONArray ja = new JSONArray(cart_list);
             for(int i=0;i<ja.length();i++){
                 JSONObject js = (JSONObject) ja.get(i);
                 price += js.getInt("amount")*js.getInt("price");
             }
-            btn_pay.setText(String.format("%s원 결제하기", format.format(price)));
+            btn_pay.setText(String.format("%s원 결제하기", DECIMAL_FORMAT.format(price)));
         } catch (JSONException e) {
             e.printStackTrace();
         }
         fragmentManager = getSupportFragmentManager();
         Bundle bundle = new Bundle(1);
-        bundle.putString(cart_items, cart_list);
+        bundle.putString(CART_ITEMS, cart_list);
         //bundle.putString(cart_items, DummyCart());
         CartFragment = new CartFragment();
         CartFragment.setArguments(bundle);
@@ -127,7 +125,7 @@ public class CartActivity extends AppCompatActivity implements CartFragment.OnLi
     public void onBackPressed() {
         cart_list = CartFragment.getCart();
         Intent result = new Intent();
-        result.putExtra(cart_items,cart_list);
+        result.putExtra(CART_ITEMS,cart_list);
         setResult(RESULT_OK,result);
         super.onBackPressed();
     }
@@ -135,6 +133,6 @@ public class CartActivity extends AppCompatActivity implements CartFragment.OnLi
     @Override
     public void onListFragmentInteraction(int price) {
         this.price = price;
-        btn_pay.setText(String.format("%s원 결제하기", format.format(price)));
+        btn_pay.setText(String.format("%s원 결제하기", DECIMAL_FORMAT.format(price)));
     }
 }

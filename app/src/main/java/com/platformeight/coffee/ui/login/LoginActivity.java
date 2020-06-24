@@ -23,17 +23,16 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.platformeight.coffee.R;
-import com.platformeight.coffee.ui.login.LoginViewModel;
-import com.platformeight.coffee.ui.login.LoginViewModelFactory;
+import com.platformeight.coffee.SharedPreference;
 
-import static com.platformeight.coffee.Constant.login_state;
-import static com.platformeight.coffee.MyApplication.user;
+import static com.platformeight.coffee.Constant.LOGIN_STATE;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -50,7 +49,15 @@ public class LoginActivity extends AppCompatActivity {
         final EditText passwordEditText = findViewById(R.id.password);
         final Button loginButton = findViewById(R.id.login);
         final Button registerButton = findViewById(R.id.register);
+        CheckBox remeber = findViewById(R.id.remember);
+        CheckBox autologin = findViewById(R.id.autologin);
         final ProgressBar loadingProgressBar = findViewById(R.id.loading);
+        if (SharedPreference.hasAttribute(this,"remeber")){
+            remeber.setChecked(SharedPreference.getAttribute(this, "remember").equals("true"));
+        }
+        if (SharedPreference.hasAttribute(this,"autologin")){
+            remeber.setChecked(SharedPreference.getAttribute(this, "autologin").equals("true"));
+        }
 
         loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
             @Override
@@ -80,6 +87,10 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 if (loginResult.getSuccess() != null) {
                     //Complete and destroy login activity once successful
+                    if (remeber.isChecked()) SharedPreference.setAttribute(getApplicationContext(),"remember","true");
+                    else SharedPreference.setAttribute(getApplicationContext(),"remember","false");
+                    if (autologin.isChecked()) SharedPreference.setAttribute(getApplicationContext(),"autologin","true");
+                    else SharedPreference.setAttribute(getApplicationContext(),"autologin","false");
                     updateUiWithUser(loginResult.getSuccess());
                     finish();
                 }
@@ -138,7 +149,7 @@ public class LoginActivity extends AppCompatActivity {
         String welcome = model.getDisplayName() + getString(R.string.welcome);
         // TODO : initiate successful logged in experience 로그인성공시
         Intent result = new Intent();
-        result.putExtra(login_state, true);
+        result.putExtra(LOGIN_STATE, true);
         setResult(Activity.RESULT_OK, result);
         Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
     }

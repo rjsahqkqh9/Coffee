@@ -21,7 +21,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import static com.platformeight.coffee.Constant.myorders;
+import static com.platformeight.coffee.Constant.MYORDERS;
 import static com.platformeight.coffee.MyApplication.user;
 
 public class MyOrdersActivity extends AppCompatActivity implements OrderFragment.OnListFragmentInteractionListener, OrderDetailFragment.OnListFragmentInteractionListener, View.OnClickListener {
@@ -87,7 +87,7 @@ public class MyOrdersActivity extends AppCompatActivity implements OrderFragment
     }
     private void setFragment(OrderFragment orderFragment, String myorder){
         Bundle bundle = new Bundle(1);
-        bundle.putString(myorders, myorder);
+        bundle.putString(MYORDERS, myorder);
         orderFragment.setArguments(bundle);
         transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.myorder_list, orderFragment).commitAllowingStateLoss();
@@ -180,7 +180,7 @@ public class MyOrdersActivity extends AppCompatActivity implements OrderFragment
         //startActivity(intent);
         OrderDetailFragment order = new OrderDetailFragment();
         Bundle bundle = new Bundle(1);
-        bundle.putString(myorders, item.toString());
+        bundle.putString(MYORDERS, item.toString());
         transaction = fragmentManager.beginTransaction();
         order.setArguments(bundle);
         transaction.replace(R.id.myorder_list, order).commitAllowingStateLoss();

@@ -19,12 +19,12 @@ public class SharedPreference {
     }
 
     // 값 읽기
-    static String getAttribute(Context context, String key){
+    public static String getAttribute(Context context, String key){
         SharedPreferences prefs = context.getSharedPreferences("MyPref", 0);
         return prefs.getString(key, null);
     }
 
-    static boolean hasAttribute(Context context, String key){
+    public static boolean hasAttribute(Context context, String key){
         SharedPreferences prefs = context.getSharedPreferences("MyPref", 0);
         return prefs.contains(key);
     }

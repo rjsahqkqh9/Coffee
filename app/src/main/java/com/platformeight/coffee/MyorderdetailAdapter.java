@@ -58,7 +58,7 @@ public class MyorderdetailAdapter extends BaseAdapter {
             JSONObject js = sample.getJSONObject(position);
             name.setText(String.format("%s %s", js.getString("base"), js.getString("name")));
             quan.setText(js.getString("amount"));
-            price.setText(Constant.format.format(js.getInt("price")));
+            price.setText(Constant.DECIMAL_FORMAT.format(js.getInt("price")));
         } catch (JSONException e) {
             e.printStackTrace();
         }

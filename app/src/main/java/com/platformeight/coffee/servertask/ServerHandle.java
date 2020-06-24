@@ -22,15 +22,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import static com.platformeight.coffee.Constant.local_name;
-import static com.platformeight.coffee.Constant.member_select;
-import static com.platformeight.coffee.Constant.order_insert_failure;
-import static com.platformeight.coffee.Constant.order_insert_success;
+import static com.platformeight.coffee.Constant.fcm_basic;
+import static com.platformeight.coffee.Constant.MEMBER_SELECT;
+import static com.platformeight.coffee.Constant.ORDER_INSERT_FAILURE;
+import static com.platformeight.coffee.Constant.ORDER_INSERT_SUCCESS;
+import static com.platformeight.coffee.Constant.ORDERLIST_USER;
+import static com.platformeight.coffee.Constant.REGISTER_FAILURE;
+import static com.platformeight.coffee.Constant.REGISTER_SUCCESS;
+import static com.platformeight.coffee.Constant.member_id_check;
+import static com.platformeight.coffee.Constant.member_login;
+import static com.platformeight.coffee.Constant.member_register;
+import static com.platformeight.coffee.Constant.order_cancel;
+import static com.platformeight.coffee.Constant.order_insert;
 import static com.platformeight.coffee.Constant.orderlist_user;
-import static com.platformeight.coffee.Constant.register_failure;
-import static com.platformeight.coffee.Constant.register_success;
-import static com.platformeight.coffee.Constant.server_name;
+import static com.platformeight.coffee.Constant.SHOPLIST_SELECT;
 import static com.platformeight.coffee.Constant.shoplist_select;
+import static com.platformeight.coffee.Constant.token_update;
 
 public class ServerHandle {
 
@@ -47,7 +54,7 @@ public class ServerHandle {
      * 회원정보관련
      */
     public int findID(String email) {
-        url = local_name+"member_id_check.php";
+        url = member_id_check;
         json = new JSONObject();
         try {
             json.put("email", email);
@@ -69,7 +76,7 @@ public class ServerHandle {
         int cnt = -1;
         try{
             JSONObject order = new JSONObject(str);
-            JSONArray index = order.getJSONArray(member_select);
+            JSONArray index = order.getJSONArray(MEMBER_SELECT);
             JSONObject tt = index.getJSONObject(0);
             cnt = tt.getInt("cnt");
         }
@@ -79,7 +86,7 @@ public class ServerHandle {
         return cnt;
     }
     public String login(String email,String pass) { //email, pass
-        url = local_name+"member_select.php";
+        url = member_login;
         json = new JSONObject();
         try {
             json.put("email", email);
@@ -102,7 +109,7 @@ public class ServerHandle {
         try{
             if (str==null) return "값없음";
             JSONObject order = new JSONObject(str);
-            JSONArray index = order.getJSONArray(member_select);
+            JSONArray index = order.getJSONArray(MEMBER_SELECT);
             for (int i = 0; i < index.length(); i++) {
                 JSONObject tt = index.getJSONObject(i);
                 result += "nm : " + tt.getString("name")+"\n";
@@ -121,7 +128,7 @@ public class ServerHandle {
     }
 
     public boolean register(MemberData user) {
-        url = local_name+"member_insert.php";
+        url = member_register;
         json = new JSONObject();
         try {
             json.put("id", user.getEmail());
@@ -138,18 +145,18 @@ public class ServerHandle {
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
-        if (result.contains(register_failure)){
+        if (result.contains(REGISTER_FAILURE)){
             Log.d(TAG, "register sql query: "+result);
             return false;
         }else if (result.contains("failure")){
             Log.d(TAG, "register connection : "+result);
             return false;
         }
-        return result.contains(register_success);
+        return result.contains(REGISTER_SUCCESS);
     }
 
     public String setToken(int no, String table, String token){
-        url = local_name+"token_update.php";
+        url = token_update;
         json = new JSONObject();
         try {
             json.put("no", no);
@@ -165,7 +172,7 @@ public class ServerHandle {
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
-        if (result.contains(register_failure)){
+        if (result.contains(REGISTER_FAILURE)){
             Log.d(TAG, "register sql query: "+result);
         }else if (result.contains("failure")){
             Log.d(TAG, "register connection : "+result);
@@ -178,7 +185,7 @@ public class ServerHandle {
      */
 
     public List<ShopData> getShopList(String location, LatLng latLng) { //
-        url = local_name+"shoplist_gps.php";
+        url = shoplist_select;
         json = new JSONObject();
         try {
             json.put("location", location);
@@ -205,7 +212,7 @@ public class ServerHandle {
         try{
             if (str==null) return null;
             JSONObject order = new JSONObject(str);
-            JSONArray index = order.getJSONArray(shoplist_select);
+            JSONArray index = order.getJSONArray(SHOPLIST_SELECT);
             for (int i = 0; i < index.length(); i++) {
                 JSONObject tt = index.getJSONObject(i);
                 result += "nm : " + tt.getString("name")+"\n";
@@ -231,7 +238,7 @@ public class ServerHandle {
      * 주문 처리
      */
     public boolean sendOrder(JSONObject js_menu) {
-        url = local_name+"order_insert.php";
+        url = order_insert;
         NetworkTask networkTask = new NetworkTask(url, js_menu);
         String result = null;
         try {
@@ -239,22 +246,21 @@ public class ServerHandle {
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
-        if (result.contains(order_insert_failure)){
+        if (result.contains(ORDER_INSERT_FAILURE)){
             Log.d(TAG, "order sql query: "+result);
             return false;
         }else if (result.contains("failure")){
             Log.d(TAG, "order connection : "+result);
             return false;
         }
-        return result.contains(order_insert_success);
+        return result.contains(ORDER_INSERT_SUCCESS);
     }
-
-    public boolean sendFCM(int no, String table) {
-        url = server_name+"fcm test.php";
+    public boolean cancelOrder(int order_no) {
+        url = order_cancel;
         json = new JSONObject();
         try {
-            json.put("no", no);
-            json.put("table", table);
+            json.put("order_no", order_no);
+            Log.d(TAG, "cancel order_no :"+ order_no);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -265,11 +271,18 @@ public class ServerHandle {
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
-        Log.d(TAG, "sendFCM: "+result);
-        return !result.contains("failure");
+        if (result.contains(ORDER_INSERT_FAILURE)){
+            Log.d(TAG, "order sql query: "+result);
+            return false;
+        }else if (result.contains("failure")){
+            Log.d(TAG, "order connection : "+result);
+            return false;
+        } else Log.d(TAG, "cancelOrder: "+result);
+        return result.contains(ORDER_INSERT_SUCCESS);
     }
+
     public String getOrderList(int no, int state) {
-        url = local_name+"orderlist_user.php";
+        url = orderlist_user;
         json = new JSONObject();
         try {
             json.put("no", no);
@@ -291,7 +304,7 @@ public class ServerHandle {
         JSONObject order = null;
         try {
             order = new JSONObject(result);
-            return order.getJSONArray(orderlist_user).toString();
+            return order.getJSONArray(ORDERLIST_USER).toString();
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -304,7 +317,7 @@ public class ServerHandle {
         try{
             if (str==null) return null;
             JSONObject order = new JSONObject(str);
-            JSONArray index = order.getJSONArray(orderlist_user);
+            JSONArray index = order.getJSONArray(ORDERLIST_USER);
             for (int i = 0; i < index.length(); i++) {
                 JSONObject tt = index.getJSONObject(i);
                 result += "nm : " + tt.getString("name")+"\n";
@@ -322,4 +335,24 @@ public class ServerHandle {
         return mValues;
     }
 
+    public boolean sendFCM(int no, String table, String testcode) {
+        url = fcm_basic;
+        json = new JSONObject();
+        try {
+            json.put("no", no);
+            json.put("table", table);
+            json.put("testcode", testcode);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        NetworkTask networkTask = new NetworkTask(url, json);
+        String result = null;
+        try {
+            result = networkTask.execute().get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        Log.d(TAG, "sendFCM: "+result);
+        return !result.contains("failure");
+    }
 }

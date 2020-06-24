@@ -19,9 +19,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.platformeight.coffee.dummy.DummyContent;
-import com.platformeight.coffee.dummy.ShopContent;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -86,7 +83,7 @@ public class MenuFragment extends Fragment {
 
             Bundle bundle = getArguments();
             if (bundle != null) {
-                menu_json = bundle.getString(Constant.menu);
+                menu_json = bundle.getString(Constant.MENU);
             }
             Log.d(TAG, "menu json : "+ menu_json);
             List<JSONObject> menu = new ArrayList<JSONObject>();

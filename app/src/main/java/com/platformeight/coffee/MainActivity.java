@@ -17,7 +17,6 @@ import androidx.fragment.app.FragmentTransaction;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -38,13 +37,12 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.platformeight.coffee.mylocation.LocationTask;
 import com.platformeight.coffee.servertask.ServerHandle;
-import com.platformeight.coffee.service.FCMService;
 import com.platformeight.coffee.ui.login.LoginActivity;
 
 import java.util.concurrent.ExecutionException;
 
-import static com.platformeight.coffee.Constant.login_state;
-import static com.platformeight.coffee.Constant.result_login;
+import static com.platformeight.coffee.Constant.LOGIN_STATE;
+import static com.platformeight.coffee.Constant.RESULT_LOGIN;
 import static com.platformeight.coffee.MyApplication.mLoginForm;
 import static com.platformeight.coffee.MyApplication.user;
 
@@ -75,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
         setContentView(R.layout.activity_main);
 
         //test developer login
-        new ServerHandle().login("kyg1084", "rlawjdgns");
+        //new ServerHandle().login("kyg1084", "rlawjdgns");
 
         if ( user.getNo() > 0 ) mLoginForm = false;
         initialView();
@@ -87,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
         fragmentManager = getSupportFragmentManager();
         Bundle bundle = new Bundle(1);
         //TODO: 앱시작시 위치 값
-        toolBar.setTitle("서울시청");
+        toolBar.setTitle("디폴트 서울시청");
         bundle.putString("location", "서울시청");
         bundle.putDouble("laty", 126.9783881);
         bundle.putDouble("latx", 37.5666102);
@@ -120,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
                 switch (id){
                     case R.id.account:
                         Toast.makeText(context, title + ": 계정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
+                        //new ServerHandle().sendFCM(2,"coffee_shops","test message");
                         break;
                     case R.id.order_List:
                         Toast.makeText(context, title + ": 주문 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
@@ -127,13 +126,15 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
                         startActivity(intent);
                         break;
                     case R.id.setting:
-                        Toast.makeText(context, title + ": 설정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(context, title + ": 설정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
+                        //TODO:: 정보수정 기기등록 페이지로 이동시킬것
+                        getToken("coffee_members");
                         break;
                     case R.id.logout:
                         //Toast.makeText(context, title + ": 로그아웃 시도중", Toast.LENGTH_SHORT).show();
                         if (mLoginForm) { //로그인 및 회원가입
                             intent = new Intent(context, LoginActivity.class);
-                            startActivityForResult(intent, result_login);
+                            startActivityForResult(intent, RESULT_LOGIN);
                         } else { //로그아웃시도
                             mLoginForm = true;
                             changeLogin();
@@ -159,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
     @Override
     public void onListFragmentInteraction(ShopData data) { //점포 클릭시 적용
         Intent intent = new Intent(this, ShopActivity.class);
-        intent.putExtra(Constant.shopdata, data);
+        intent.putExtra(Constant.SHOP_DATA, data);
         startActivity(intent);
         //Toast.makeText(this, "event "+item.content, Toast.LENGTH_SHORT).show();
     }
@@ -229,7 +230,7 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
         //LocationTask nt = new LocationTask(mDefaultLocation);
         try {
             String str = nt.execute().get();
-            Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
             toolBar.setTitleText((TextView) findViewById(R.id.toolbar_title), str);
             Log.d(TAG, "myLocation: lat:"+ latLng.latitude+ ", long: "+ latLng.longitude);
             //this.item.setLocation("행정동",128.583052,35.798838);
@@ -265,9 +266,9 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == result_login && resultCode == RESULT_OK) { //로그인 결과
-            if (data.hasExtra(login_state)) {
-                mLoginForm = !data.getBooleanExtra(login_state,false);
+        if (requestCode == RESULT_LOGIN && resultCode == RESULT_OK) { //로그인 결과
+            if (data.hasExtra(LOGIN_STATE)) {
+                mLoginForm = !data.getBooleanExtra(LOGIN_STATE,false);
                 Log.d(TAG, "onActivityResult: "+mLoginForm);
                 changeLogin();
                 getToken("coffee_members");
@@ -291,8 +292,8 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
                         // Log and toast
                         String msg = getString(R.string.msg_token_fmt, token);
                         Log.d(TAG, msg);
-                        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
-                        //msg = new ServerHandle().setToken(user.getNo(),table,token);
+                        //Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, new ServerHandle().setToken(user.getNo(),table,token));
                         //Log.d(TAG, msg);
                     }
                 });

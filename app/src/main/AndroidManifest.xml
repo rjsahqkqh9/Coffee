@@ -62,9 +62,15 @@
             </intent-filter>
         </activity>
         <activity android:name=".MyOrdersActivity" />
-        <activity android:name=".ShopActivity" />
-        <activity android:name=".OrderActivity" />
-        <activity android:name=".CartActivity" />
+        <activity
+            android:name=".ShopActivity"
+            android:taskAffinity="task.order" />
+        <activity
+            android:name=".OrderActivity"
+            android:taskAffinity="task.order" />
+        <activity
+            android:name=".CartActivity"
+            android:taskAffinity="task.order" />
         <activity
             android:name=".ui.login.LoginActivity"
             android:label="@string/title_activity_login" />

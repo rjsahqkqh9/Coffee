@@ -20,14 +20,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Objects;
 
-import static com.platformeight.coffee.Constant.cart_code;
-import static com.platformeight.coffee.Constant.cart_item;
-import static com.platformeight.coffee.Constant.cart_items;
+import static com.platformeight.coffee.Constant.CART_CODE;
+import static com.platformeight.coffee.Constant.CART_ITEMS;
 
 public class OrderActivity extends AppCompatActivity {
 
@@ -72,8 +69,8 @@ public class OrderActivity extends AppCompatActivity {
     private void initialData() {
         //radio_id=new ArrayList<String>();
         try {
-            menu = new JSONObject(Objects.requireNonNull(getIntent().getStringExtra(Constant.menu)));
-            cart_list = new JSONArray(Objects.requireNonNull(getIntent().getStringExtra(cart_items)));
+            menu = new JSONObject(Objects.requireNonNull(getIntent().getStringExtra(Constant.MENU)));
+            cart_list = new JSONArray(Objects.requireNonNull(getIntent().getStringExtra(CART_ITEMS)));
 
             menuName.setText(menu.getString("name"));
             base_num = menu.getInt("bnum");
@@ -238,8 +235,8 @@ public class OrderActivity extends AppCompatActivity {
         Intent result = new Intent();
         String str = store_cart();
         Log.d(TAG, run_cart+" cart_Button: " + str);
-        result.putExtra(cart_items,str);
-        result.putExtra(cart_code,run_cart);
+        result.putExtra(CART_ITEMS,str);
+        result.putExtra(CART_CODE,run_cart);
         setResult(RESULT_OK,result);
         finish();
     }

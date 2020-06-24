@@ -23,12 +23,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import static com.platformeight.coffee.Constant.cart_items;
-import static com.platformeight.coffee.Constant.cart_code;
-import static com.platformeight.coffee.Constant.menu;
-import static com.platformeight.coffee.Constant.result_cart;
-import static com.platformeight.coffee.Constant.result_order;
-import static com.platformeight.coffee.Constant.shopdata;
+import static com.platformeight.coffee.Constant.CART_ITEMS;
+import static com.platformeight.coffee.Constant.CART_CODE;
+import static com.platformeight.coffee.Constant.MENU;
+import static com.platformeight.coffee.Constant.RESULT_CART;
+import static com.platformeight.coffee.Constant.RESULT_ORDER;
+import static com.platformeight.coffee.Constant.SHOP_DATA;
 
 public class ShopActivity extends AppCompatActivity implements MenuFragment.OnListFragmentInteractionListener{
     private ShopData shop;
@@ -61,22 +61,22 @@ public class ShopActivity extends AppCompatActivity implements MenuFragment.OnLi
             public void onSingleClick(View view) {
                 //toggleFab();
                 Intent intent = new Intent(getApplicationContext(), CartActivity.class);
-                intent.putExtra(shopdata, shop);
-                intent.putExtra(cart_items, cart_list);
-                startActivityForResult(intent, result_cart);
+                intent.putExtra(SHOP_DATA, shop);
+                intent.putExtra(CART_ITEMS, cart_list);
+                startActivityForResult(intent, RESULT_CART);
             }
         });
     }
 
     private void initialData() {
-        shop = (ShopData) getIntent().getSerializableExtra(Constant.shopdata);
+        shop = (ShopData) getIntent().getSerializableExtra(Constant.SHOP_DATA);
         cart_list = new JSONArray().toString();
         title.setText(shop.getName());
 
         //TODO: shop으로 메뉴 및 정보 호출
         fragmentManager = getSupportFragmentManager();
         Bundle bundle = new Bundle(1);
-        bundle.putString(menu, shop.getMenu());
+        bundle.putString(MENU, shop.getMenu());
         //bundle.putString(menu, shopMenuSample());
         menuFragment = new MenuFragment();
         menuFragment.setArguments(bundle);
@@ -89,30 +89,30 @@ public class ShopActivity extends AppCompatActivity implements MenuFragment.OnLi
     public void onListFragmentInteraction(JSONObject item) {
 
         Intent intent = new Intent(this, OrderActivity.class);
-        intent.putExtra(menu, item.toString());
-        intent.putExtra(cart_items, cart_list);
-        startActivityForResult(intent, result_order);
+        intent.putExtra(MENU, item.toString());
+        intent.putExtra(CART_ITEMS, cart_list);
+        startActivityForResult(intent, RESULT_ORDER);
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == result_order && resultCode == RESULT_OK) { //장바구니 담아두기
-            if (data.hasExtra(cart_items) && data.hasExtra(cart_code)) {
-                this.cart_list = data.getStringExtra(cart_items);
+        if (requestCode == RESULT_ORDER && resultCode == RESULT_OK) { //장바구니 담아두기
+            if (data.hasExtra(CART_ITEMS) && data.hasExtra(CART_CODE)) {
+                this.cart_list = data.getStringExtra(CART_ITEMS);
                 Log.d("ShopActivity", "onActivityResult: " + this.cart_list);
-                if (data.getBooleanExtra(cart_code, false)) {//장바구니 실행
+                if (data.getBooleanExtra(CART_CODE, false)) {//장바구니 실행
                     Intent intent = new Intent(this, CartActivity.class);
-                    intent.putExtra(shopdata,shop);
-                    intent.putExtra(cart_items, cart_list);
-                    startActivityForResult(intent, result_cart);
+                    intent.putExtra(SHOP_DATA,shop);
+                    intent.putExtra(CART_ITEMS, cart_list);
+                    startActivityForResult(intent, RESULT_CART);
                 } else { //fab_cart animation
                     toggleFab();
                 }
             }
-        } else if (requestCode == result_cart && resultCode == RESULT_OK) {
-            if (data.hasExtra(cart_items)) {
-                this.cart_list = data.getStringExtra(cart_items);
+        } else if (requestCode == RESULT_CART && resultCode == RESULT_OK) {
+            if (data.hasExtra(CART_ITEMS)) {
+                this.cart_list = data.getStringExtra(CART_ITEMS);
             }
         }
     }

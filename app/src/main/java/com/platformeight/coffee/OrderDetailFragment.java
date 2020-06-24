@@ -16,8 +16,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
+
+import com.platformeight.coffee.servertask.ServerHandle;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,8 +26,8 @@ import org.json.JSONObject;
 
 import java.util.Iterator;
 
-import static com.platformeight.coffee.Constant.format;
-import static com.platformeight.coffee.Constant.myorders;
+import static com.platformeight.coffee.Constant.DECIMAL_FORMAT;
+import static com.platformeight.coffee.Constant.MYORDERS;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -46,6 +47,8 @@ public class OrderDetailFragment extends Fragment {
 
     private OrderDetailFragment.OnListFragmentInteractionListener mListener;
 
+    char isCheck;
+    int order_no;
 
     public OrderDetailFragment() {
         // Required empty public constructor
@@ -94,9 +97,10 @@ public class OrderDetailFragment extends Fragment {
 
         Bundle bundle = getArguments();
         if (bundle != null && !bundle.isEmpty()) {
-            String myorder = bundle.getString(myorders);
+            String myorder = bundle.getString(MYORDERS);
             try {
                 JSONObject order = new JSONObject(myorder);
+                order_no = order.getInt("no");
                 name.setText(order.getString("name"));
                 address.setText(order.getString("address"));
                 /*
@@ -118,23 +122,31 @@ public class OrderDetailFragment extends Fragment {
                 }
 
                 total_quan.setText(order.getString("order_amount"));
-                total_price.setText(format.format(order.getInt("order_price")));
+                total_price.setText(DECIMAL_FORMAT.format(order.getInt("order_price")));
 
-                point.setText(format.format(order.getInt("order_point")));
-                price.setText(format.format(order.getInt("total_price")));
+                point.setText(DECIMAL_FORMAT.format(order.getInt("order_point")));
+                price.setText(DECIMAL_FORMAT.format(order.getInt("total_price")));
 
+                isCheck = order.getString("isCheck").charAt(0);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
 
         Button btn_check = view.findViewById(R.id.order_detail_btn_check);
-        btn_check.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btn_check.setOnClickListener(v -> mListener.onListFragmentInteraction());
+        Button btn_cancel = view.findViewById(R.id.order_detail_btn_cancel);
+        if (isCheck=='Y'){
+            btn_cancel.setEnabled(false);
+        } else {
+            btn_cancel.setOnClickListener(v -> {
+                //TODO:: 고객 입장 주문대기상태의 주문취소 처리 및 pg 취소요청
+                new ServerHandle().cancelOrder(order_no);
                 mListener.onListFragmentInteraction();
-            }
-        });
+            });
+            view.findViewById(R.id.order_detail_caution).setVisibility(View.GONE);
+        }
+
         return view;
     }
     private View setlist(JSONArray items, int position){
@@ -155,7 +167,7 @@ public class OrderDetailFragment extends Fragment {
             }
             name.setText(info);
             quan.setText(js.getString("amount"));
-            price.setText(format.format(js.getInt("price")));
+            price.setText(DECIMAL_FORMAT.format(js.getInt("price")));
         } catch (JSONException e) {
             e.printStackTrace();
         }

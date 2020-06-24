@@ -52,7 +52,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         //getstate 및 open close에 따라 회색처리
         LoadImageTask loadRegistrationTask = new LoadImageTask();
         try {
-            Bitmap originalBm = loadRegistrationTask.execute(Constant.local_name+ holder.mItem.getImage()).get();
+            Bitmap originalBm = loadRegistrationTask.execute(Constant.server_name+ holder.mItem.getImage()).get();
             holder.mImageView.setImageBitmap(originalBm);
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();

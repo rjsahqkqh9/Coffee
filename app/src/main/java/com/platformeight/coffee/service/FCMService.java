@@ -55,7 +55,7 @@ public class FCMService extends FirebaseMessagingService {
             } else {
                 // Handle message within 10 seconds
 
-                handleNow();
+                //handleNow();
             }
 
         }
@@ -89,8 +89,8 @@ public class FCMService extends FirebaseMessagingService {
      */
     private void scheduleJob() {
         // [START dispatch_job]
-        //OneTimeWorkRequest work = new OneTimeWorkRequest.Builder(MyWorker.class).build();
-        //WorkManager.getInstance().beginWith(work).enqueue();
+        OneTimeWorkRequest work = new OneTimeWorkRequest.Builder(MyWorker.class).build();
+        WorkManager.getInstance().beginWith(work).enqueue();
         // [END dispatch_job]
     }
 
@@ -149,5 +149,11 @@ public class FCMService extends FirebaseMessagingService {
         }
 
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+    }
+
+    @Override
+    public void onDeletedMessages() {
+        Log.d(TAG, "onDeletedMessages: coffee");
+        super.onDeletedMessages();
     }
 }

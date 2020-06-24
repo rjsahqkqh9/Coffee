@@ -2,9 +2,9 @@
     <string name="app_name">Coffee</string>
     <string name="app_name_kor">아아</string>
     <!-- app -->
-    <string name="permission_rationale_location">Access to the location service is required to demonstrate the \'my location\' feature, which shows your current location on the map.</string>
-    <string name="location_permission_denied">This sample requires location permission to enable the \'my location\' layer. Please try again and grant access to use the location.\nIf the permission has been permanently denied, it can be enabled from the System Settings &gt; Apps &gt; \'아아\'.</string>
-    <string name="permission_required_toast">Location permission is required for this.</string>
+    <string name="permission_rationale_location">내주변 카페를 찾기위해서는 위치권한을 승인하셔야 서비스이용이 가능합니다.</string>
+    <string name="location_permission_denied">내주변 카페를 찾기위해서는 위치권한을 승인하셔야 서비스이용이 가능합니다. 위치권한을 승인하시고 다시 시작하세요\n권한이 거부되어있다면, System Settings &gt; Apps &gt; \'아아\' 에서 권한을 승인하실수 있습니다.</string>
+    <string name="permission_required_toast">위치권한을 승인하셔야 서비스이용이 가능합니다.</string>
 
     <string name="subscribe_to_weather">Subscribe To Weather</string>
     <string name="log_token">Log Token</string>
@@ -21,7 +21,7 @@
     <string name="default_notification_channel_name" translatable="true">Weather</string>
     <!-- [END fcm_default_icon_string] -->
     <string name="msg_subscribe_failed">Failed to subscribe to weather topic</string>
-    <string name="fcm_message">FCM Message</string>
+    <string name="fcm_message">아아 주문</string>
 
     <!-- nav, menu -->
     <string name="nav_header_desc">이미지</string>
@@ -29,7 +29,7 @@
     <string name="nav_header_subtitle">0</string>
     <string name="menu_myinfo">내 정보</string>
     <string name="menu_myorders">주문조회</string>
-    <string name="menu_settings">설정</string>
+    <string name="menu_settings">설정(fcm토큰설정)</string>
     <string name="menu_login">로그인</string>
     <string name="menu_logout">로그아웃</string>
 
@@ -59,4 +59,19 @@
     <string name="invalid_password2">패스워드가 틀립니다.</string>
     <string name="login_failed">"로그인에 실패하였습니다."</string>
 
+    <!-- 주문 상세-->
+    <string name="order_detail_totalpay">총 결제금액</string>
+    <string name="order_detail_check">주문확인</string>
+    <string name="order_detail_cancel">주문취소</string>
+    <string name="order_detail_cautionmessage">※음료 제작중으로 취소가 비활성됩니다.</string>
+    <string name="order_detail_point">마일리지 할인</string>
+    <string name="order_detail_discount_text">할인정보</string>
+    <string name="order_detail_totalmenu">메뉴합계</string>
+    <string name="order_detail_menu_name">메뉴</string>
+    <string name="order_detail_menu_quan">수량</string>
+    <string name="order_detail_menu_price">금액</string>
+    <string name="order_detail_list_text">주문서</string>
+    <string name="order_detail_address">주소</string>
+    <string name="order_detail_shopname">가게명</string>
+    <string name="order_detail_text">주문정보</string>
 </resources>

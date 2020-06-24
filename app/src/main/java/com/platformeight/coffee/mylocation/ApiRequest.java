@@ -63,7 +63,7 @@ public class ApiRequest {
         Log.d(TAG, "gps location code : "+responseBody);
         try {
             JSONObject jsonObj = new JSONObject(responseBody);
-            if(jsonObj.getJSONObject("status").getString("name")!="ok") return "서비스외지역";
+            if(!jsonObj.getJSONObject("status").getString("name").equals("ok")) return "서비스외지역";
             JSONArray array1 = new JSONArray(String.valueOf(jsonObj.get("results")));
             JSONObject obj1 = array1.getJSONObject(0);
             JSONObject obj2 = obj1.getJSONObject("region");

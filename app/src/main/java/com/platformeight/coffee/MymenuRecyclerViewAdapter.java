@@ -19,7 +19,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DecimalFormat;
 import java.util.Iterator;
 import java.util.List;
 
@@ -59,7 +58,7 @@ public class MymenuRecyclerViewAdapter extends RecyclerView.Adapter<MymenuRecycl
             for(Iterator<String> itr = js.keys(); itr.hasNext();){
                 String str = itr.next();
                 TextView tv = new TextView(holder.mView.getContext());
-                tv.setText(String.format("- %s : ￦%s원", str, Constant.format.format(js.getInt(str))));
+                tv.setText(String.format("- %s : ￦%s원", str, Constant.DECIMAL_FORMAT.format(js.getInt(str))));
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 tv.setLayoutParams(lp);
                 holder.mTextGroup.addView(tv);

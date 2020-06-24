@@ -9,7 +9,6 @@ import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,8 +19,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DecimalFormat;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -56,8 +53,8 @@ public class MyorderRecyclerViewAdapter extends RecyclerView.Adapter<MyorderRecy
             holder.mAddressView.setText(holder.mItem.getString("address"));
             String name = new JSONArray(holder.mItem.getString("detail")).getJSONObject(0).getString("name");
             String info = String.format("%s 외 %d개\n총 결제금액 : %s원\n%s", name,
-                    holder.mItem.getInt("order_amount"),
-                    Constant.format.format(holder.mItem.getInt("total_price")),
+                    holder.mItem.getInt("order_amount")-1,
+                    Constant.DECIMAL_FORMAT.format(holder.mItem.getInt("total_price")),
                     holder.mItem.getString("order_time"));
             holder.mInfoView.setText(info);
             //holder.mInfoView.setText(holder.mItem.getString("info"));
