@@ -30,7 +30,7 @@ public class SharedPreference {
     }
 
     // 데이터 삭제
-    static void removeAttribute(Context context, String key){
+    public static void removeAttribute(Context context, String key){
         SharedPreferences pref = context.getSharedPreferences("MyPref", 0);
         SharedPreferences.Editor editor = pref.edit();
         editor.remove(key);
@@ -38,7 +38,7 @@ public class SharedPreference {
     }
 
     // 모든 데이터 삭제
-    static void removeAllAttribute(Context context){
+    public static void removeAllAttribute(Context context){
         SharedPreferences pref = context.getSharedPreferences("MyPref", 0);
         SharedPreferences.Editor editor = pref.edit();
         editor.clear();

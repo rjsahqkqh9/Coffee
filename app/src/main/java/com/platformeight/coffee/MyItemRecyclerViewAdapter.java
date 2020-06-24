@@ -58,7 +58,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             e.printStackTrace();
         }
         //holder.mDistanceView.setText(String.format("%skm", distance.distance(holder.mItem.getMapy(), holder.mItem.getMapx(), 35.798838, 128.583052, "kilometer")));
-        holder.mDistanceView.setText(String.format("%skm",holder.mItem.getDistance()));
+        holder.mDistanceView.setText(String.format("약 %5s km",holder.mItem.getDistance()));
         holder.mIdView.setText(String.valueOf(mValues.get(position).getNo()));
         holder.mNameView.setText(mValues.get(position).getName());
         holder.mView.setOnClickListener(new OnSingleClickListener() {

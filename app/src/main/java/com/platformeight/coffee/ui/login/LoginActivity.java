@@ -49,15 +49,26 @@ public class LoginActivity extends AppCompatActivity {
         final EditText passwordEditText = findViewById(R.id.password);
         final Button loginButton = findViewById(R.id.login);
         final Button registerButton = findViewById(R.id.register);
-        CheckBox remeber = findViewById(R.id.remember);
-        CheckBox autologin = findViewById(R.id.autologin);
+        final CheckBox remeber = findViewById(R.id.remember);
+        final CheckBox autologin = findViewById(R.id.autologin);
         final ProgressBar loadingProgressBar = findViewById(R.id.loading);
-        if (SharedPreference.hasAttribute(this,"remeber")){
-            remeber.setChecked(SharedPreference.getAttribute(this, "remember").equals("true"));
+        if (SharedPreference.hasAttribute(this,"REMEMBER")){
+            if (SharedPreference.getAttribute(this, "REMEMBER").equals("true")){
+                remeber.setChecked(true);
+                usernameEditText.setText(SharedPreference.getAttribute(getApplicationContext(),"ID"));
+                passwordEditText.setText(SharedPreference.getAttribute(getApplicationContext(),"PASS"));
+                loginViewModel.loginDataChanged(usernameEditText.getText().toString(),
+                        passwordEditText.getText().toString());
+            }
         }
-        if (SharedPreference.hasAttribute(this,"autologin")){
-            remeber.setChecked(SharedPreference.getAttribute(this, "autologin").equals("true"));
+        if (SharedPreference.hasAttribute(this,"AUTO")){
+            autologin.setChecked(SharedPreference.getAttribute(this, "AUTO").equals("true"));
         }
+        autologin.setOnClickListener(v -> {
+            if (((CheckBox)v).isChecked()){
+                remeber.setChecked(true);
+            }
+        });
 
         loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
             @Override
@@ -87,10 +98,18 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 if (loginResult.getSuccess() != null) {
                     //Complete and destroy login activity once successful
-                    if (remeber.isChecked()) SharedPreference.setAttribute(getApplicationContext(),"remember","true");
-                    else SharedPreference.setAttribute(getApplicationContext(),"remember","false");
-                    if (autologin.isChecked()) SharedPreference.setAttribute(getApplicationContext(),"autologin","true");
-                    else SharedPreference.setAttribute(getApplicationContext(),"autologin","false");
+                    if (autologin.isChecked()) {
+                        SharedPreference.setAttribute(getApplicationContext(),"AUTO","true");
+                        SharedPreference.setAttribute(getApplicationContext(),"ID",usernameEditText.getText().toString());
+                        SharedPreference.setAttribute(getApplicationContext(),"PASS",passwordEditText.getText().toString());
+                    } else SharedPreference.setAttribute(getApplicationContext(),"AUTO","false");
+                    if (remeber.isChecked()) {
+                        SharedPreference.setAttribute(getApplicationContext(),"REMEMBER","true");
+                        SharedPreference.setAttribute(getApplicationContext(),"ID",usernameEditText.getText().toString());
+                        SharedPreference.setAttribute(getApplicationContext(),"PASS",passwordEditText.getText().toString());
+                    } else {
+                        SharedPreference.setAttribute(getApplicationContext(),"REMEMBER","false");
+                    }
                     updateUiWithUser(loginResult.getSuccess());
                     finish();
                 }

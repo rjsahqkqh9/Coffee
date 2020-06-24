@@ -85,10 +85,13 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
         fragmentManager = getSupportFragmentManager();
         Bundle bundle = new Bundle(1);
         //TODO: 앱시작시 위치 값
+        enableMyLocation();
+        /*
         toolBar.setTitle("디폴트 서울시청");
         bundle.putString("location", "서울시청");
         bundle.putDouble("laty", 126.9783881);
         bundle.putDouble("latx", 37.5666102);
+         */
         item = new ItemFragment();
         item.setArguments(bundle);
         transaction = fragmentManager.beginTransaction();
