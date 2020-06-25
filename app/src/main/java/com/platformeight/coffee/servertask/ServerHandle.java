@@ -19,6 +19,8 @@ import org.json.JSONObject;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -126,7 +128,6 @@ public class ServerHandle {
         }
         return result;
     }
-
     public boolean register(MemberData user) {
         url = member_register;
         json = new JSONObject();
@@ -208,7 +209,8 @@ public class ServerHandle {
     List<ShopData> parserShop(String str){
         String result = "";
         List<ShopData> mValues = new ArrayList<ShopData>();
-        Log.d(TAG, "parserShop: "+str);
+        Log.d(TAG, "parserShop: "+str+"\nsize: "+mValues.size());
+        String day = getDateDay();
         try{
             if (str==null) return null;
             JSONObject order = new JSONObject(str);
@@ -217,21 +219,53 @@ public class ServerHandle {
                 JSONObject tt = index.getJSONObject(i);
                 result += "nm : " + tt.getString("name")+"\n";
                 Log.d(TAG, "parserShop: "+String.valueOf(tt.getInt("no")) + tt.getString("name"));
-                ShopData data= new ShopData(String.valueOf(tt.getInt("no")), tt.getString("image"), tt.getString("name"), tt.getString("menu"),tt.getInt("state"), tt.getString("shop_open"), tt.getString("shop_close"), tt.getDouble("mapx"), tt.getDouble("mapy"), tt.getDouble("distance"));
-                //LocalTime testTime = LocalTime.of(6,0);
+                ShopData data= new ShopData(String.valueOf(tt.getInt("no")), tt.getString("image"), tt.getString("name"), tt.getString("menu"),tt.getInt("state"), tt.getString("shop_open"), tt.getString("shop_close"),tt.getString("rest_date"), tt.getDouble("mapx"), tt.getDouble("mapy"), tt.getDouble("distance"));
+                // 영업시간
                 if (data.getShopOpen().isAfter(LocalTime.now()) || data.getShopClose().isBefore(LocalTime.now())){
-                    //data.setState(0);
+                    data.setState(0);
+                }
+                // 휴무일
+                if (data.getRest_date().contains(day)){
+                    data.setState(0);
                 }
                 mValues.add(data);
-
             }
             if(result.equals("")) return null;
         }
         catch (JSONException e){
             Log.d(TAG, "parserShop: "+str);
         }
-        Log.d(TAG, "parserShop: "+mValues.size());
         return mValues;
+    }
+
+    private static String getDateDay() {
+        String day = "";
+        Calendar cal = Calendar.getInstance();
+        int dayNum = cal.get(Calendar.DAY_OF_WEEK);
+        switch (dayNum) {
+            case 1:
+                day = "일";
+                break;
+            case 2:
+                day = "월";
+                break;
+            case 3:
+                day = "화";
+                break;
+            case 4:
+                day = "수";
+                break;
+            case 5:
+                day = "목";
+                break;
+            case 6:
+                day = "금";
+                break;
+            case 7:
+                day = "토";
+                break;
+        }
+        return day;
     }
 
     /*

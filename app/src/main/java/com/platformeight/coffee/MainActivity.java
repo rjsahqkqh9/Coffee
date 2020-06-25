@@ -37,6 +37,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.platformeight.coffee.mylocation.LocationTask;
 import com.platformeight.coffee.servertask.ServerHandle;
+import com.platformeight.coffee.service.FCMService;
 import com.platformeight.coffee.ui.login.LoginActivity;
 
 import java.util.concurrent.ExecutionException;
@@ -142,6 +143,7 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
                             mLoginForm = true;
                             changeLogin();
                             user = new MemberData();
+                            new ServerHandle().setToken(user.getNo(),"coffee_members","");
                             Toast.makeText(context, "로그아웃", Toast.LENGTH_SHORT).show();
                         }
                         break;
@@ -165,6 +167,14 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
         Intent intent = new Intent(this, ShopActivity.class);
         intent.putExtra(Constant.SHOP_DATA, data);
         startActivity(intent);
+        //Toast.makeText(this, "event "+item.content, Toast.LENGTH_SHORT).show();
+    }
+    @Override
+    public void onListFragmentInteraction(int index) { //갱신
+        if ( index==0 ) {
+            enableMyLocation();
+            Toast.makeText(this, "현재위치 갱신", Toast.LENGTH_SHORT).show();
+        }
         //Toast.makeText(this, "event "+item.content, Toast.LENGTH_SHORT).show();
     }
     @Override
@@ -297,6 +307,9 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
                         Log.d(TAG, msg);
                         //Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
                         Log.d(TAG, new ServerHandle().setToken(user.getNo(),table,token));
+                        Intent service = new Intent(context, FCMService.class);
+                        service.setPackage("com.platformeight.coffee");
+                        context.startService(service);
                         //Log.d(TAG, msg);
                     }
                 });

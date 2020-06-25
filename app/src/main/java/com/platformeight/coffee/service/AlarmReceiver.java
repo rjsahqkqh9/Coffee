@@ -21,13 +21,20 @@ public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent)
     {
-        if(intent.getAction().equals(BOOT_ACTION))
+        if (intent.getAction().equals(BOOT_ACTION))
         {
             Log.d(TAG, "BOOT_ACTION : alarm service ON");
-            context.startService(new Intent("com.google.firebase.MESSAGING_EVENT"));
-        }else if(intent.getAction().equals(suspend)){
+            //context.startService(new Intent("com.google.firebase.MESSAGING_EVENT"));
+            Intent service = new Intent(context, FCMService.class);
+            service.setPackage("com.google.firebase.MESSAGING_EVENT");
+            context.startService(service);
+        } else if (intent.getAction().equals(suspend))
+        {
             Log.d(TAG, "suspend : alarm service ON");
-            context.startService(new Intent("com.google.firebase.MESSAGING_EVENT"));
+            //context.startService(new Intent("com.google.firebase.MESSAGING_EVENT"));
+            Intent service = new Intent(context, FCMService.class);
+            service.setPackage("com.google.firebase.MESSAGING_EVENT");
+            context.startService(service);
         }
     }
 }

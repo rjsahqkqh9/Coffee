@@ -56,6 +56,7 @@ public class ShopData implements Serializable {
 
     private String rest_date;
 
+    //sample
     public ShopData(String no, String image, String name, int state, String shopOpen, String shopClose) { //itemfragment 리스트용
         //리스트에 출력
         this.no = Integer.parseInt(no);
@@ -67,6 +68,7 @@ public class ShopData implements Serializable {
         this.shopOpen = LocalTime.parse(shopOpen);
         this.shopClose = LocalTime.parse(shopClose);
     }
+    //sample
     public ShopData(String no, String image, String name, String menu, int state, String shopOpen, String shopClose) { //itemfragment 리스트용
         //리스트에 출력
         this.no = Integer.parseInt(no);
@@ -78,6 +80,7 @@ public class ShopData implements Serializable {
         this.shopOpen = LocalTime.parse(shopOpen);
         this.shopClose = LocalTime.parse(shopClose);
     }
+    //sample
     public ShopData(String no, String image, String name, String menu, int state, String shopOpen, String shopClose, double mapx, double mapy) { //itemfragment 리스트용
         //리스트에 출력
         this.no = Integer.parseInt(no);
@@ -92,7 +95,8 @@ public class ShopData implements Serializable {
         this.mapx = mapx;
         this.mapy = mapy;
     }
-    public ShopData(String no, String image, String name, String menu, int state, String shopOpen, String shopClose, double mapx, double mapy, double distance) { //itemfragment 리스트용
+
+    public ShopData(String no, String image, String name, String menu, int state, String shopOpen, String shopClose, String rest_date, double mapx, double mapy, double distance) { //itemfragment 리스트용
         //리스트에 출력
         this.no = Integer.parseInt(no);
         this.image = image;
@@ -103,6 +107,8 @@ public class ShopData implements Serializable {
         this.state = state;
         this.shopOpen = LocalTime.parse(shopOpen);
         this.shopClose = LocalTime.parse(shopClose);
+        //work
+        this.rest_date = rest_date;
         this.mapx = mapx;
         this.mapy = mapy;
         this.distance = distance;
@@ -202,6 +208,14 @@ public class ShopData implements Serializable {
 
     public void setShopClose(LocalTime shopClose) {
         this.shopClose = shopClose;
+    }
+
+    public String getRest_date() {
+        return rest_date;
+    }
+
+    public void setRest_date(String rest_date) {
+        this.rest_date = rest_date;
     }
 
     public JSONObject toJson() {

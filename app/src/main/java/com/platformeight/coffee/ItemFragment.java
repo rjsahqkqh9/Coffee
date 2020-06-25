@@ -37,6 +37,7 @@ public class ItemFragment extends Fragment {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
+    private static final String TAG = "ItemFragment";
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
@@ -98,9 +99,29 @@ public class ItemFragment extends Fragment {
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(context,LinearLayoutManager.VERTICAL);
             //dividerItemDecoration.setDrawable(context.getResources().getDrawable(R.drawable.recyclerview_divider));
             recyclerView.addItemDecoration(dividerItemDecoration);
+
+            recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                    if (newState == RecyclerView.SCROLL_STATE_SETTLING){
+                        if (!recyclerView.canScrollVertically(-1)) {
+                            //새로고침
+                            Log.i(TAG, "Top of list");
+                            mListener.onListFragmentInteraction(0);
+                        } else if (!recyclerView.canScrollVertically(1)) {
+                            Log.i(TAG, "End of list");
+                            //리스트 더 보이기
+                            //mListener.onListFragmentInteraction(한페이지크기);
+                        } else {
+                            //Log.i(TAG, "idle");
+                        }
+                    }
+                }
+            });
         }
         return view;
     }
+
     private List<ShopData> mValues;
     public void setLocation(String lo, LatLng latLng) { //임시, 좌표값
         //TODO: 현재지역 좌표값으로 데이터베이스 조회하여 리스트 생성
@@ -216,5 +237,6 @@ public class ItemFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         void onListFragmentInteraction(ShopData data);
+        void onListFragmentInteraction(int index);
     }
 }

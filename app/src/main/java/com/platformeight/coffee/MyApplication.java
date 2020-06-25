@@ -34,7 +34,6 @@ public class MyApplication extends Application {
         autologin();
     }
 
-
     private static final String AUTOLOGIN = "autologin";
     private void autologin() {
         //휴대폰내 로그인정보 읽어오기
