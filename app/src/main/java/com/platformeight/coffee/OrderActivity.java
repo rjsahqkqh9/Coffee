@@ -25,17 +25,19 @@ import java.util.Objects;
 
 import static com.platformeight.coffee.Constant.CART_CODE;
 import static com.platformeight.coffee.Constant.CART_ITEMS;
+import static com.platformeight.coffee.Constant.SHOP_NAME;
 
 public class OrderActivity extends AppCompatActivity {
 
     private static final String TAG = "OrderActivity";
     private static final DecimalFormat format = new DecimalFormat("###,###");
 
-    private Button add_Button;
+    private Button plus_Button;
     private Button minus_Button;
     private Button cart_Button;
     private Button pay_Button;
 
+    private TextView title;
     private TextView menuName;
     private TextView countText;
 
@@ -67,6 +69,7 @@ public class OrderActivity extends AppCompatActivity {
     }
 
     private void initialData() {
+        title.setText(getIntent().getStringExtra(SHOP_NAME));
         //radio_id=new ArrayList<String>();
         try {
             menu = new JSONObject(Objects.requireNonNull(getIntent().getStringExtra(Constant.MENU)));
@@ -131,30 +134,21 @@ public class OrderActivity extends AppCompatActivity {
     }
 
     private void initialView() {
-
+        title = findViewById(R.id.shop_title);
         menuName = findViewById(R.id.order_menu_name);
         /*수량 증감소 시작*/
-        add_Button = (Button)findViewById(R.id.button4);
-        minus_Button = (Button)findViewById(R.id.button3);
-        countText = (TextView)findViewById(R.id.textView4);
+        plus_Button = (Button)findViewById(R.id.order_btn_plus);
+        minus_Button = (Button)findViewById(R.id.order_btn_minus);
+        countText = (TextView)findViewById(R.id.order_count);
 
 
         countText.setText(String.valueOf(count));
 
-        add_Button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                countText.setText("" + ++count);
-            }
-        });
+        plus_Button.setOnClickListener(view -> countText.setText("" + ++count));
 
-
-        minus_Button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(count > 1){
-                    countText.setText("" + --count);
-                }
+        minus_Button.setOnClickListener(view -> {
+            if(count > 1){
+                countText.setText("" + --count);
             }
         });
         /*수량 증감소 끝*/
@@ -169,26 +163,26 @@ public class OrderActivity extends AppCompatActivity {
         /*옵션추가 끝*/
 
         /*장바구니 버튼 시작*/
-        cart_Button = (Button)findViewById(R.id.button7);
+        cart_Button = (Button)findViewById(R.id.order_btn_cart);
         cart_Button.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View view) {
                 //장바구니 상품정보 전송후 뒤로가기
                 //Log.d(TAG, "cart_Button: " +store_cart());
-                intent(false);
+                sendCart(false);
             }
         });
         /*장바구니 버튼 끝*/
 
         /*결제 버튼 시작*/
-        pay_Button = (Button)findViewById(R.id.button8);
+        pay_Button = (Button)findViewById(R.id.order_btn_pay);
         pay_Button.setOnClickListener(new OnSingleClickListener() {
             @Override
             public void onSingleClick(View view) {
                 //장바구니로
                 //if (!radio_Group.isSelected()) return;
                 //Log.d(TAG, "pay_Button: " +store_cart());
-                intent(true);
+                sendCart(true);
             }
         });
         /*결제 버튼 끝*/
@@ -231,7 +225,7 @@ public class OrderActivity extends AppCompatActivity {
         }
         return cart_list.toString();
     }
-    private void intent(boolean run_cart){
+    private void sendCart(boolean run_cart){
         Intent result = new Intent();
         String str = store_cart();
         Log.d(TAG, run_cart+" cart_Button: " + str);

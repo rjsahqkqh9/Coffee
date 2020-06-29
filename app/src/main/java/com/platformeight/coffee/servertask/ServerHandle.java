@@ -17,6 +17,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -209,25 +210,39 @@ public class ServerHandle {
     List<ShopData> parserShop(String str){
         String result = "";
         List<ShopData> mValues = new ArrayList<ShopData>();
-        Log.d(TAG, "parserShop: "+str+"\nsize: "+mValues.size());
         String day = getDateDay();
         try{
             if (str==null) return null;
             JSONObject order = new JSONObject(str);
             JSONArray index = order.getJSONArray(SHOPLIST_SELECT);
+            Log.d(TAG, "parserShop: size "+index.length() +" data "+str);
             for (int i = 0; i < index.length(); i++) {
                 JSONObject tt = index.getJSONObject(i);
                 result += "nm : " + tt.getString("name")+"\n";
-                Log.d(TAG, "parserShop: "+String.valueOf(tt.getInt("no")) + tt.getString("name"));
-                ShopData data= new ShopData(String.valueOf(tt.getInt("no")), tt.getString("image"), tt.getString("name"), tt.getString("menu"),tt.getInt("state"), tt.getString("shop_open"), tt.getString("shop_close"),tt.getString("rest_date"), tt.getDouble("mapx"), tt.getDouble("mapy"), tt.getDouble("distance"));
+                Log.d(TAG, "=========================");
+                Log.d(TAG, String.valueOf(tt.getInt("no")) + tt.getString("name"));
+                ShopData data= new ShopData(String.valueOf(tt.getInt("no")), tt.getString("image"), tt.getString("name"), tt.getString("address"), tt.getString("phone"), tt.getString("menu"),tt.getInt("state"), tt.getString("shop_open"), tt.getString("shop_close"),tt.getString("rest_date"), tt.getDouble("mapx"), tt.getDouble("mapy"), tt.getDouble("distance"));
+                /*
                 // 영업시간
-                if (data.getShopOpen().isAfter(LocalTime.now()) || data.getShopClose().isBefore(LocalTime.now())){
+                LocalTime now = LocalTime.now();
+                //LocalTime now = LocalTime.of(4,59);
+                Log.d(TAG, "parserShop: times : " +data.getShopOpen()+"  "+now+ "   "+data.getShopClose());
+                if (data.getShopOpen().isAfter(data.getShopClose())){
+                    if (!data.getShopOpen().isAfter(now) && !data.getShopClose().isAfter(now))
+                        data.setState(0);
+                    Log.d(TAG, "parserShop: times : night"+!data.getShopOpen().isBefore(now) + !data.getShopClose().isAfter(now));
+                } else if (data.getShopOpen().isBefore(now) && data.getShopClose().isAfter(now)){
+                    Log.d(TAG, "parserShop: times");
+                }else {
                     data.setState(0);
+                    Log.d(TAG, "parserShop: times : timeout");
                 }
+                Log.d(TAG, "=========================");
                 // 휴무일
                 if (data.getRest_date().contains(day)){
                     data.setState(0);
                 }
+                 */
                 mValues.add(data);
             }
             if(result.equals("")) return null;

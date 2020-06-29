@@ -9,58 +9,100 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <LinearLayout
+    <ScrollView
+        android:id="@+id/shop_scroll"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/shop_title"
+                android:text="커피집 샘플 1 메뉴정보"
+                android:textSize="30sp"
+                android:textColor="@color/colorBrown"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"/>
+            <View
+                android:id="@+id/view_line"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/colorBrown" />
+            <ImageView
+                android:id="@+id/shop_image"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="@dimen/text_margin"
+                android:layout_gravity="center"
+                android:src="@drawable/monarco"/>
+            <TextView
+                android:id="@+id/shop_address"
+                android:text="주소"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/shop_btn_call"
+                    style="@style/btn_theme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="가게전화걸기" />
 
-        <TextView
-            android:id="@+id/shop_title"
-            android:text="커피집 샘플 1 메뉴정보"
-            android:textSize="30sp"
-            android:textColor="@color/colorBrown"
+                <Button
+                    android:id="@+id/shop_btn_map"
+                    style="@style/btn_theme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="가게 위치정보" />
+
+            </LinearLayout>
+            <View
+                android:id="@+id/space"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"/>
+
+            <FrameLayout
+                android:id="@+id/menu_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                tools:layout="@layout/fragment_menu_list" />
+        </LinearLayout>
+    </ScrollView>
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_margin="@dimen/fab_margin"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/shop_fab_cart"
+            android:layout_gravity="bottom|end"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:layout_constraintBottom_toTopOf="@id/list"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-        <View
-            android:id="@+id/view_line"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/colorBrown" />
-        <ImageView
-            android:id="@+id/shop_image"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginTop="@dimen/text_margin"
-            android:layout_gravity="center"
-            android:src="@drawable/monarco"/>
-        <View
-            android:id="@+id/space"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"/>
-        <FrameLayout
-            android:id="@+id/menu_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/space"
-            tools:layout="@layout/fragment_menu_list" />
-    </LinearLayout>
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/shop_fab_cart"
-        android:layout_gravity="bottom|end"
+            android:clickable="true"
+            app:backgroundTint="@color/colorBrown"
+            app:fabSize="auto"
+            app:borderWidth="0dp"
+            app:srcCompat="@drawable/ic_baseline_shopping_cart_24"/>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <TextView
+        android:id="@+id/badge_notification_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
-        android:clickable="true"
-        app:backgroundTint="@color/colorBrown"
-        app:fabSize="auto"
-        app:borderWidth="0dp"
-        app:srcCompat="@drawable/ic_baseline_shopping_cart_24"/>
+        android:layout_marginEnd="25dp"
+        app:layout_anchor="@id/shop_fab_cart"
+        app:layout_anchorGravity="center_vertical|end"
+        android:background="@drawable/badge_item_count"
+        android:text="27"
+        android:textColor="#FFF"
+        android:textSize="12sp"
+        android:textStyle="bold" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

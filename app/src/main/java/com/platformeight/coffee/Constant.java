@@ -40,9 +40,14 @@ public final class Constant {
     public static final int RESULT_LOGIN = 1000;
     public static final int RESULT_ORDER = 1001;
     public static final int RESULT_CART = 1002;
+
+    //permission
+    public static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+    public static final int CALL_PERMISSION_REQUEST_CODE = 2;
     //intent data code
     public static final String CART_CODE = "cart_code";
     public static final String SHOP_DATA = "ShopData";
+    public static final String SHOP_NAME = "shopname";
     public static final String MENU = "menu";
     public static final String MYORDERS = "myorders";
     public static final String CART_ITEMS = "cart";

@@ -27,6 +27,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.DialogFragment;
 
+import static com.platformeight.coffee.Constant.CALL_PERMISSION_REQUEST_CODE;
+import static com.platformeight.coffee.Constant.LOCATION_PERMISSION_REQUEST_CODE;
+
 /**
  * Utility class for access to runtime permissions.
  */
@@ -155,22 +158,33 @@ public abstract class PermissionUtils {
             Bundle arguments = getArguments();
             final int requestCode = arguments.getInt(ARGUMENT_PERMISSION_REQUEST_CODE);
             mFinishActivity = arguments.getBoolean(ARGUMENT_FINISH_ACTIVITY);
-
-            return new AlertDialog.Builder(getActivity())
-                    .setMessage(R.string.permission_rationale_location)
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
+            if (requestCode==LOCATION_PERMISSION_REQUEST_CODE)
+                return new AlertDialog.Builder(getActivity())
+                        .setMessage(R.string.permission_rationale_location)
+                        .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                             // After click on Ok, request the permission.
                             ActivityCompat.requestPermissions(getActivity(),
                                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                                     requestCode);
                             // Do not finish the Activity while requesting permission.
                             mFinishActivity = false;
-                        }
-                    })
-                    //.setNegativeButton(android.R.string.cancel, null)
-                    .create();
+                        })
+                        //.setNegativeButton(android.R.string.cancel, null)
+                        .create();
+            else if (requestCode==CALL_PERMISSION_REQUEST_CODE)
+                return new AlertDialog.Builder(getActivity())
+                        .setMessage(R.string.permission_rationale_call)
+                        .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                            // After click on Ok, request the permission.
+                            ActivityCompat.requestPermissions(getActivity(),
+                                    new String[]{Manifest.permission.CALL_PHONE},
+                                    requestCode);
+                            // Do not finish the Activity while requesting permission.
+                            mFinishActivity = false;
+                        })
+                        //.setNegativeButton(android.R.string.cancel, null)
+                        .create();
+            return null;
         }
 
         @Override

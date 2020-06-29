@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
         android:name=".MyApplication"
@@ -20,6 +21,10 @@
         android:supportsRtl="true"
         android:theme="@style/NoTheme"
         tools:ignore="GoogleAppIndexingWarning">
+
+        <meta-data
+            android:name="com.naver.maps.map.CLIENT_ID"
+            android:value="@string/naver_map_sdk_client_id" />
         <receiver
             android:name=".service.AlarmReceiver"
             android:enabled="true"
@@ -66,6 +71,10 @@
         <activity android:name=".MyOrdersActivity" />
         <activity
             android:name=".ShopActivity"
+            android:taskAffinity="task.order" />
+        <activity
+            android:name="CustomLocationTrackingActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:taskAffinity="task.order" />
         <activity
             android:name=".OrderActivity"

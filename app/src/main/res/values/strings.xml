@@ -4,7 +4,10 @@
     <!-- app -->
     <string name="permission_rationale_location">내주변 카페를 찾기위해서는 위치권한을 승인하셔야 서비스이용이 가능합니다.</string>
     <string name="location_permission_denied">내주변 카페를 찾기위해서는 위치권한을 승인하셔야 서비스이용이 가능합니다. 위치권한을 승인하시고 다시 시작하세요\n권한이 거부되어있다면, System Settings &gt; Apps &gt; \'아아\' 에서 권한을 승인하실수 있습니다.</string>
-    <string name="permission_required_toast">위치권한을 승인하셔야 서비스이용이 가능합니다.</string>
+
+    <string name="permission_rationale_call">카페에 전화를 걸기위해서는 전화 권한을 승인하셔야 서비스이용이 가능합니다.</string>
+    <string name="call_permission_denied">카페에 전화를 걸기위해서는 전화 권한을 승인하셔야 서비스이용이 가능합니다. 위치권한을 승인하시고 다시 시작하세요\n권한이 거부되어있다면, System Settings &gt; Apps &gt; \'아아\' 에서 권한을 승인하실수 있습니다.</string>
+    <string name="permission_required_toast">권한을 승인하셔야 서비스이용이 가능합니다.</string>
 
     <string name="subscribe_to_weather">Subscribe To Weather</string>
     <string name="log_token">Log Token</string>
@@ -44,6 +47,9 @@
     <string name="sign_minus">-</string>
     <string name="cart_name">장바구니</string>
     <string name="cart_del">삭제</string>
+
+    <string name="cart_btn_cart_pay">결제하기</string>
+
 
     <!-- 로그인 및 회원가입 -->
     <string name="title_activity_login">LoginActivity</string>

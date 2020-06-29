@@ -55,6 +55,7 @@
 
         <Button
             android:id="@+id/btn_minus"
+            style="@style/btn_theme"
             android:layout_width="10dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.25"
@@ -70,6 +71,7 @@
 
         <Button
             android:id="@+id/btn_plus"
+            style="@style/btn_theme"
             android:layout_width="10dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.25"

@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.platformeight.coffee.servertask.ServerHandle;
@@ -39,6 +40,7 @@ public class CartActivity extends AppCompatActivity implements CartFragment.OnLi
     private CartFragment CartFragment;
     private FragmentTransaction transaction;
 
+    private TextView name;
     private Button btn_pay;
     private int price;
     private Context context;
@@ -53,6 +55,7 @@ public class CartActivity extends AppCompatActivity implements CartFragment.OnLi
     }
 
     private void initialView() {
+        name = findViewById(R.id.cart_name);
         btn_pay = findViewById(R.id.cart_pay);
         btn_pay.setOnClickListener(new OnSingleClickListener() {
             @Override
@@ -102,6 +105,7 @@ public class CartActivity extends AppCompatActivity implements CartFragment.OnLi
         price=0;
         cart_list = getIntent().getStringExtra(CART_ITEMS);
         shop = (ShopData) getIntent().getSerializableExtra(Constant.SHOP_DATA);
+        name.setText(shop.getName());
         try {
             JSONArray ja = new JSONArray(cart_list);
             for(int i=0;i<ja.length();i++){

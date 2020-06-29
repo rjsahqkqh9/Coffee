@@ -138,6 +138,7 @@ public class OrderDetailFragment extends Fragment {
         Button btn_cancel = view.findViewById(R.id.order_detail_btn_cancel);
         if (isCheck=='Y'){
             btn_cancel.setEnabled(false);
+            //btn_cancel.setTextColor(Color.GRAY);
         } else {
             btn_cancel.setOnClickListener(v -> {
                 //TODO:: 고객 입장 주문대기상태의 주문취소 처리 및 pg 취소요청

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~  Create by platform eight on 2020. 6. 29.
+  ~  Copyright (c) 2019. platform eight. All rights reserved.
+  -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <corners android:radius="8dp" />
+    <solid android:color="@color/colorBrown" />
+    <stroke
+        android:width="2dip"
+        android:color="#FFF" />
+    <padding
+        android:bottom="6dp"
+        android:left="6dp"
+        android:right="6dp"
+        android:top="6dp" />
+</shape>

@@ -42,6 +42,7 @@ import com.platformeight.coffee.ui.login.LoginActivity;
 
 import java.util.concurrent.ExecutionException;
 
+import static com.platformeight.coffee.Constant.LOCATION_PERMISSION_REQUEST_CODE;
 import static com.platformeight.coffee.Constant.LOGIN_STATE;
 import static com.platformeight.coffee.Constant.RESULT_LOGIN;
 import static com.platformeight.coffee.MyApplication.mLoginForm;
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
     private TextView nav_point;
     private Context context = this;
     private ItemFragment item;
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+
     float DEFAULT_ZOOM = 15;
     private Location mLastKnownLocation;
 

@@ -231,11 +231,13 @@
                 android:orientation="vertical">
                 <Button
                     android:id="@+id/order_detail_btn_check"
+                    style="@style/btn_theme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/order_detail_check" />
                 <Button
                     android:id="@+id/order_detail_btn_cancel"
+                    style="@style/btn_theme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/order_detail_cancel" />

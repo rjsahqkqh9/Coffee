@@ -56,6 +56,9 @@ public class ShopData implements Serializable {
 
     private String rest_date;
 
+    public ShopData() {
+    }
+
     //sample
     public ShopData(String no, String image, String name, int state, String shopOpen, String shopClose) { //itemfragment 리스트용
         //리스트에 출력
@@ -96,12 +99,14 @@ public class ShopData implements Serializable {
         this.mapy = mapy;
     }
 
-    public ShopData(String no, String image, String name, String menu, int state, String shopOpen, String shopClose, String rest_date, double mapx, double mapy, double distance) { //itemfragment 리스트용
+    public ShopData(String no, String image, String name, String address, String phone, String menu, int state, String shopOpen, String shopClose, String rest_date, double mapx, double mapy, double distance) { //itemfragment 리스트용
         //리스트에 출력
         this.no = Integer.parseInt(no);
         this.image = image;
         this.name = name;
         this.menu = menu;
+        this.address = address;
+        this.phone = phone;
 
         //영업중인지 확인
         this.state = state;

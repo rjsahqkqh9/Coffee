@@ -15,4 +15,4 @@
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
     tools:context=".MenuFragment"
-    tools:listitem="@layout/fragment_menu" />
+    tools:listitem="@layout/fragment_menu"/>
