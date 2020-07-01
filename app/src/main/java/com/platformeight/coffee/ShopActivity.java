@@ -14,7 +14,6 @@ import androidx.fragment.app.FragmentTransaction;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -41,6 +40,8 @@ import static com.platformeight.coffee.Constant.SHOP_DATA;
 import static com.platformeight.coffee.Constant.SHOP_NAME;
 
 public class ShopActivity extends AppCompatActivity implements MenuFragment.OnListFragmentInteractionListener{
+
+    private final String TAG = "ShopActivity";
 
     private ShopData shop;
     private String cart_list;
@@ -71,7 +72,17 @@ public class ShopActivity extends AppCompatActivity implements MenuFragment.OnLi
         initialView();
         initialData();
     }
-
+    private void addFragment(String name, String menu){
+        fragmentManager = getSupportFragmentManager();
+        Bundle bundle = new Bundle(2);
+        bundle.putString("name", name);
+        bundle.putString(MENU, menu);
+        //bundle.putString(menu, shopMenuSample());
+        menuFragment = new MenuFragment();
+        menuFragment.setArguments(bundle);
+        transaction = fragmentManager.beginTransaction();
+        transaction.add(R.id.menu_category_group, menuFragment).commit();
+    }
     private void initialView() {
         title = findViewById(R.id.shop_title);
         shop_image = findViewById(R.id.shop_image);
@@ -111,6 +122,8 @@ public class ShopActivity extends AppCompatActivity implements MenuFragment.OnLi
         });
 
         //TODO: shop으로 메뉴 및 정보 호출
+        /*
+        // 이전 단일 메뉴 프래그먼트
         fragmentManager = getSupportFragmentManager();
         Bundle bundle = new Bundle(1);
         bundle.putString(MENU, shop.getMenu());
@@ -119,6 +132,20 @@ public class ShopActivity extends AppCompatActivity implements MenuFragment.OnLi
         menuFragment.setArguments(bundle);
         transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.menu_list, menuFragment).commitAllowingStateLoss();
+         */
+        String menu_json = shop.getMenu();
+        //menu_json = "[{\"no\":1, \"name\":\"음료\", \"data\":[{\"name\":\"아메리카노\",\"image\":\"이미지주소값\",\"bnum\":2,\"onum\":2,\"base\":[{\"HOT\":4300,\"ICE\":5000}],\"opt\":[{\"샷추가\":500,\"휘핑크림\":300}]}]},{\"no\":2, \"name\":\"기타\", \"data\":[{\"name\":\"아메리카노\",\"image\":\"이미지주소값\",\"bnum\":2,\"onum\":2,\"base\":[{\"HOT\":4300,\"ICE\":5000}],\"opt\":[{\"샷추가\":500}]}]}]";
+        Log.d(TAG, "menu category : "+ menu_json);
+        try {
+            JSONArray ja = new JSONArray(menu_json);
+            for (int i=0;i<ja.length();i++){
+                Log.d(TAG, "menu ja : "+ ja.getJSONObject(i).getString("name"));
+                Log.d(TAG, "menu ja : "+ ja.get(i));
+                addFragment(ja.getJSONObject(i).getString("name"),ja.getJSONObject(i).getString("data"));
+            }
+        } catch (JSONException e1) {
+            e1.printStackTrace();
+        }
 
     }
     private void enablePhoneCall() {

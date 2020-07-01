@@ -39,12 +39,15 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.naver.maps.geometry.LatLng;
 import com.naver.maps.map.CameraUpdate;
+import com.naver.maps.map.LocationTrackingMode;
 import com.naver.maps.map.MapFragment;
 import com.naver.maps.map.NaverMap;
 import com.naver.maps.map.OnMapReadyCallback;
 import com.naver.maps.map.overlay.LocationOverlay;
 import com.naver.maps.map.overlay.Marker;
+import com.naver.maps.map.util.FusedLocationSource;
 
+import static com.platformeight.coffee.Constant.LOCATION_PERMISSION_REQUEST_CODE;
 import static com.platformeight.coffee.Constant.SHOP_DATA;
 
 public class CustomLocationTrackingActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -61,7 +64,7 @@ public class CustomLocationTrackingActivity extends AppCompatActivity implements
     private NaverMap map;
     private FloatingActionButton fab;
 
-    ShopData shopData;
+    private ShopData shopData;
 
     private final LocationCallback locationCallback = new LocationCallback() {
         @Override
@@ -104,10 +107,12 @@ public class CustomLocationTrackingActivity extends AppCompatActivity implements
 
         fab = findViewById(R.id.fab);
         fab.setImageResource(R.drawable.ic_my_location_black_24dp);
-        trackingEnabled = true;
+        //trackingEnabled = true;
         shopData = new ShopData();
-        if (getIntent().hasExtra(SHOP_DATA))
+        if (getIntent().hasExtra(SHOP_DATA)) {
             shopData = (ShopData) getIntent().getSerializableExtra(Constant.SHOP_DATA);
+        }
+        locationSource = new FusedLocationSource(this, PERMISSION_REQUEST_CODE);
     }
 
     @Override
@@ -151,18 +156,22 @@ public class CustomLocationTrackingActivity extends AppCompatActivity implements
         super.onStop();
         disableLocation();
     }
-
+    private FusedLocationSource locationSource;
     @Override
     public void onMapReady(@NonNull NaverMap naverMap) {
         map = naverMap;
         //marker
+        LatLng coord = new LatLng(35.896961, 128.616370);
         Marker marker = new Marker();
         marker.setCaptionText(shopData.getName());
         marker.setSubCaptionText(shopData.getAddress());
         //marker.setPosition(new LatLng(shopData.getMapy(), shopData.getMapx()));
-        marker.setPosition(new LatLng(35.896961, 128.616370));//카페 모나코 북현오거리
+        marker.setPosition(coord);//카페 모나코 북현오거리
         //marker.setPosition(new LatLng(35.8841367, 128.59574));//창조경제혁신센터
         marker.setMap(map);
+        map.moveCamera(CameraUpdate.scrollTo(coord));
+        map.setLocationSource(locationSource);
+        map.setLocationTrackingMode(LocationTrackingMode.NoFollow);
 
         fab.setOnClickListener(v -> {
             if (trackingEnabled) {

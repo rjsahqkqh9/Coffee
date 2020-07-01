@@ -5,9 +5,13 @@
 
 package com.platformeight.coffee;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -18,6 +22,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,6 +47,7 @@ public class MenuFragment extends Fragment {
     private int mColumnCount = 1;
     private MenuFragment.OnListFragmentInteractionListener mListener;
     private String menu_json;
+    private boolean fold = false;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -69,12 +79,13 @@ public class MenuFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_menu_list, container, false);
+        //View view = inflater.inflate(R.layout.fragment_menu_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_category, container, false);
 
         // Set the adapter
-        if (view instanceof RecyclerView) {
+        if (view.findViewById(R.id.menu_category_list) instanceof RecyclerView) {
             Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
+            RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.menu_category_list);
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
@@ -84,6 +95,10 @@ public class MenuFragment extends Fragment {
             Bundle bundle = getArguments();
             if (bundle != null) {
                 menu_json = bundle.getString(Constant.MENU);
+                String name = bundle.getString("name");
+                TextView tv_name = (TextView) view.findViewById(R.id.menu_category);
+                tv_name.setText(name);
+                Log.d(TAG, "onCreateView: "+name);
             }
             Log.d(TAG, "menu json : "+ menu_json);
             List<JSONObject> menu = new ArrayList<JSONObject>();
@@ -96,12 +111,36 @@ public class MenuFragment extends Fragment {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+
+            //recyclerView.setHasFixedSize(true);
+            //recyclerView.setNestedScrollingEnabled(false);
             //recyclerView.setAdapter(new MymenuRecyclerViewAdapter(DummyContent.ITEMS, mListener));
             recyclerView.setAdapter(new MymenuRecyclerViewAdapter(menu, mListener));
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(context,LinearLayoutManager.VERTICAL);
             recyclerView.addItemDecoration(dividerItemDecoration);
+
+
+            ImageButton btn_fold = view.findViewById(R.id.menu_category_btn_folding);
+            Animation arrow_down = AnimationUtils.loadAnimation(context, R.anim.category_down);
+            Animation arrow_up = AnimationUtils.loadAnimation(context, R.anim.category_up);
+
+            btn_fold.setOnClickListener(v -> {
+                if (fold){ //펴기
+                    btn_fold.startAnimation(arrow_up);
+                    recyclerView.setVisibility(View.VISIBLE);
+                } else { //접기
+                    btn_fold.startAnimation(arrow_down);
+                    recyclerView.setVisibility(View.GONE);
+                }
+                this.fold=!fold;
+            });
         }
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
     }
 
     @Override

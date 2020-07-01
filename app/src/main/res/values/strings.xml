@@ -37,6 +37,8 @@
     <string name="menu_logout">로그아웃</string>
 
     <!-- 주문 -->
+    <string name="shop_btn_map">지도보기</string>
+    <string name="shop_btn_call">전화걸기</string>
     <string name="order_btn_cart_keep">담아두기</string>
     <string name="order_btn_cart_open">장바구니</string>
     <string name="order_category_text1">기본</string>
