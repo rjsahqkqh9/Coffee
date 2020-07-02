@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
         <LinearLayout
+            android:id="@+id/menu_category_panel_folding"
             android:background="@color/colorBrown"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -26,7 +27,7 @@
                 android:layout_marginStart="@dimen/text_margin"
                 android:layout_marginEnd="@dimen/text_margin"
                 android:textAppearance="?attr/textAppearanceListItem" />
-            <ImageButton
+            <ImageView
                 android:id="@+id/menu_category_btn_folding"
                 android:src="@drawable/ic_baseline_keyboard_arrow_up_24"
                 android:backgroundTint="@color/colorBrown"

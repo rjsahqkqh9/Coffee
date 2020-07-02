@@ -34,13 +34,16 @@ import static com.platformeight.coffee.Constant.REGISTER_FAILURE;
 import static com.platformeight.coffee.Constant.REGISTER_SUCCESS;
 import static com.platformeight.coffee.Constant.member_id_check;
 import static com.platformeight.coffee.Constant.member_login;
+import static com.platformeight.coffee.Constant.member_pass_check;
 import static com.platformeight.coffee.Constant.member_register;
+import static com.platformeight.coffee.Constant.member_update;
 import static com.platformeight.coffee.Constant.order_cancel;
 import static com.platformeight.coffee.Constant.order_insert;
 import static com.platformeight.coffee.Constant.orderlist_user;
 import static com.platformeight.coffee.Constant.SHOPLIST_SELECT;
 import static com.platformeight.coffee.Constant.shoplist_select;
 import static com.platformeight.coffee.Constant.token_update;
+import static com.platformeight.coffee.MyApplication.user;
 
 public class ServerHandle {
 
@@ -75,6 +78,26 @@ public class ServerHandle {
         }
         return parserCount(result);
     }
+    public int checkPassword(int no, String pass) {
+        url = member_pass_check;
+        json = new JSONObject();
+        try {
+            json.put("no", no);
+            json.put("pass", pass);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        NetworkTask networkTask = new NetworkTask(url, json);
+        String result = null;
+        try {
+            result = networkTask.execute().get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return parserCount(result);
+    }
     int parserCount(String str){
         int cnt = -1;
         try{
@@ -88,6 +111,7 @@ public class ServerHandle {
         }
         return cnt;
     }
+
     public String login(String email,String pass) { //email, pass
         url = member_login;
         json = new JSONObject();
@@ -108,7 +132,7 @@ public class ServerHandle {
     }
     String parserUser(String str){
         String result = "";
-        MyApplication.user = new MemberData();
+        user = new MemberData();
         try{
             if (str==null) return "값없음";
             JSONObject order = new JSONObject(str);
@@ -116,11 +140,12 @@ public class ServerHandle {
             for (int i = 0; i < index.length(); i++) {
                 JSONObject tt = index.getJSONObject(i);
                 result += "nm : " + tt.getString("name")+"\n";
-                MyApplication.user.setNo(tt.getInt("no"));
-                MyApplication.user.setName(tt.getString("name"));
-                MyApplication.user.setPhone(tt.getString("phone"));
-                MyApplication.user.setState(tt.getInt("state"));
-                MyApplication.user.setPoint(tt.getInt("point"));
+                user.setNo(tt.getInt("no"));
+                user.setName(tt.getString("name"));
+                user.setPhone(tt.getString("phone"));
+                user.setState(tt.getInt("state"));
+                user.setPoint(tt.getInt("point"));
+                user.setEmail(tt.getString("email"));
             }
             if(result.equals("")) return "값없음";
         }
@@ -156,7 +181,33 @@ public class ServerHandle {
         }
         return result.contains(REGISTER_SUCCESS);
     }
-
+    public String setMember(boolean pass){
+        url = member_update;
+        json = new JSONObject();
+        try {
+            json.put("no", user.getNo());
+            json.put("pass", (pass)?user.getPass():"");
+            json.put("phone", user.getPhone());
+            json.put("name", user.getName());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        NetworkTask networkTask = new NetworkTask(url, json);
+        String result = null;
+        try {
+            result = networkTask.execute().get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        if (result.contains(REGISTER_FAILURE)){
+            Log.d(TAG, "register sql query: "+result);
+            result="정보수정 실패";
+        }else if (result.contains("failure")){
+            Log.d(TAG, "register connection : "+result);
+            result="서버연결 실패";
+        }
+        return result;
+    }
     public String setToken(int no, String table, String token){
         url = token_update;
         json = new JSONObject();

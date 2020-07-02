@@ -88,6 +88,7 @@
         <activity
             android:name=".ui.login.RegisterActivity"
             android:label="@string/title_activity_login" />
+        <activity android:name=".MemberInfoActivity"/>
         <!-- [START firebase_service] -->
         <service android:name=".service.FCMService">
             <intent-filter>

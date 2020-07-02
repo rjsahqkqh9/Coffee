@@ -26,6 +26,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -120,16 +122,17 @@ public class MenuFragment extends Fragment {
             recyclerView.addItemDecoration(dividerItemDecoration);
 
 
-            ImageButton btn_fold = view.findViewById(R.id.menu_category_btn_folding);
+            LinearLayout panel = view.findViewById(R.id.menu_category_panel_folding);
+            ImageView image_fold = view.findViewById(R.id.menu_category_btn_folding);
             Animation arrow_down = AnimationUtils.loadAnimation(context, R.anim.category_down);
             Animation arrow_up = AnimationUtils.loadAnimation(context, R.anim.category_up);
 
-            btn_fold.setOnClickListener(v -> {
+            panel.setOnClickListener(v -> {
                 if (fold){ //펴기
-                    btn_fold.startAnimation(arrow_up);
+                    image_fold.startAnimation(arrow_up);
                     recyclerView.setVisibility(View.VISIBLE);
                 } else { //접기
-                    btn_fold.startAnimation(arrow_down);
+                    image_fold.startAnimation(arrow_down);
                     recyclerView.setVisibility(View.GONE);
                 }
                 this.fold=!fold;

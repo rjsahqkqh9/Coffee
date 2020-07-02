@@ -19,7 +19,7 @@
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
@@ -27,54 +27,60 @@
             <TextView
                 android:id="@+id/myorder_title"
                 android:text="@string/menu_myorders"
-                android:textSize="30sp"
+                android:textSize="24sp"
                 android:textColor="@color/colorBrown"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center_horizontal"/>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/colorBrown" />
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:background="@color/colorBrown" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:orientation="horizontal">
-            <Button
-                android:id="@+id/myorder_btn_list1"
-                android:text="주문내역"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:background="@color/colorWhite"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+            android:orientation="vertical">
             <View
-                android:layout_width="1px"
-                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
                 android:background="@color/colorBrown" />
-            <Button
-                android:id="@+id/myorder_btn_list2"
-                android:text="완료내역"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:background="@color/colorWhite"
-                android:layout_width="wrap_content"
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:background="@color/colorBrown" />
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_gravity="center"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/myorder_btn_list1"
+                    android:text="주문내역"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:background="@color/colorWhite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
+                <View
+                    android:layout_width="1px"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorBrown" />
+                <Button
+                    android:id="@+id/myorder_btn_list2"
+                    android:text="완료내역"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:background="@color/colorWhite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+            <View
+                android:id="@+id/view_line"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorBrown" />
+
         </LinearLayout>
-        <View
-            android:id="@+id/view_line"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/colorBrown" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

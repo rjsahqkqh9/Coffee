@@ -98,7 +98,6 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
         item.setArguments(bundle);
         transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.Item_list, item).commitAllowingStateLoss();
-
     }
 
     private void initialView() {
@@ -122,11 +121,13 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
                 Intent intent=null;
                 switch (id){
                     case R.id.account:
-                        Toast.makeText(context, title + ": 계정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(context, title + ": 계정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
                         //new ServerHandle().sendFCM(2,"coffee_shops","test message");
+                        intent = new Intent(context, MemberInfoActivity.class);
+                        startActivity(intent);
                         break;
                     case R.id.order_List:
-                        Toast.makeText(context, title + ": 주문 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(context, title + ": 주문 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
                         intent = new Intent(context, MyOrdersActivity.class);
                         startActivity(intent);
                         break;
@@ -220,18 +221,15 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
         try {
             if (mLocationPermissionGranted) {
                 Task locationResult = mFusedLocationProviderClient.getLastLocation();
-                locationResult.addOnCompleteListener(this, new OnCompleteListener() {
-                    @Override
-                    public void onComplete(@NonNull Task task) {
-                        if (task.isSuccessful()) {
-                            mLastKnownLocation = (Location) task.getResult();
-                            Log.d("mylocation", "Current location task:\n" + task.getResult());
-                            myLocation(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()));
-                            //toolBar.setTitleText((TextView) findViewById(R.id.toolbar_title), "타이틀");
-                        } else {
-                            Log.d(TAG, "Current location is null. Using defaults.");
-                            Log.e(TAG, "Exception: %s", task.getException());
-                        }
+                locationResult.addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        mLastKnownLocation = (Location) task.getResult();
+                        Log.d("mylocation", "Current location task:\n" + task.getResult());
+                        myLocation(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()));
+                        //toolBar.setTitleText((TextView) findViewById(R.id.toolbar_title), "타이틀");
+                    } else {
+                        Log.d(TAG, "Current location is null. Using defaults.");
+                        Log.e(TAG, "Exception: %s", task.getException());
                     }
                 });
             }

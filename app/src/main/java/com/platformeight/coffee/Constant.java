@@ -17,6 +17,8 @@ public final class Constant {
 
     //ServerHandle
     public static final String member_id_check = server_name +folder+ "member_id_check.php";
+    public static final String member_pass_check = server_name +folder+ "member_pass_check.php";
+    public static final String member_update = server_name +folder+ "member_update.php";
     public static final String member_login = server_name +folder+ "member_select.php";
     public static final String member_register = server_name +folder+ "member_insert.php";
     public static final String shoplist_select = server_name +folder+ "shoplist_gps.php";
