@@ -33,6 +33,7 @@
     <string name="menu_myinfo">내 정보</string>
     <string name="menu_myorders">주문조회</string>
     <string name="menu_settings">설정(fcm토큰설정)</string>
+    <string name="menu_license">라이센스</string>
     <string name="menu_login">로그인</string>
     <string name="menu_logout">로그아웃</string>
 
@@ -82,4 +83,27 @@
     <string name="order_detail_address">주소</string>
     <string name="order_detail_shopname">가게명</string>
     <string name="order_detail_text">주문정보</string>
+
+
+    <!-- 라이센스 -->
+    <string name="title_activity_license">LicenseActivity</string>
+    <string name="Google_Firebase_Title">Google Firebase</string>
+    <string name="Google_Firebase_Content">Cloud Messaging\nCopyright 2016 Google Inc,.\nApache License 2.0</string>
+    <string name="Crashlytics_Title">Crashlytics</string>
+    <string name="Crashlytics_Content">Copyright 2016 Google Inc,.\nThe MIT License (MIT)</string>
+    <string name="Junit_Title">Junit</string>
+    <string name="Junit_Content">Copyright © 2002-2018 JUnit.\nEclipse Public License</string>
+    <string name="Junit_Platform_Runner_Title">Junit Platform Runner</string>
+    <string name="Junit_Platform_Runner_Content">Eclipse Public License v2.0</string>
+    <string name="Espresso_Core_Title">Espresso Core</string>
+    <string name="Espresso_Core_Content">Copyright (C) 2014 The Android Open Source Project\nApache License 2.0</string>
+    <string name="Apache_License_Version_2_0_Title">Apache License Version 2.0</string>
+    <string name="Apache_License_Version_2_0_Content">nApache License\nVersion 2.0, January 2004\nhttp://www.apache.org/licenses/</string>
+    <string name="MIT_License_Title">MIT License</string>
+    <string name="MIT_License_Content">MIT License</string>
+    <string name="Eclipse_Public_License_1_0_Title">Eclipse Public License 1.0</string>
+    <string name="Eclipse_Public_License_1_0_Content"></string>
+    <string name="Eclipse_Public_License_V2_0_Title">Eclipse Public License - v 2.0</string>
+    <string name="Eclipse_Public_License_V2_0_Content"></string>
+
 </resources>

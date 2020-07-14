@@ -55,12 +55,12 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         LoadImageTask loadRegistrationTask = new LoadImageTask();
         try {
             Bitmap originalBm = loadRegistrationTask.execute(Constant.server_name+ holder.mItem.getImage()).get();
-            holder.mImageView.setImageBitmap(originalBm);
+            if(originalBm!=null) holder.mImageView.setImageBitmap(originalBm);
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
         //holder.mDistanceView.setText(String.format("%skm", distance.distance(holder.mItem.getMapy(), holder.mItem.getMapx(), 35.798838, 128.583052, "kilometer")));
-        holder.mDistanceView.setText(String.format("약 %5.2f km",holder.mItem.getDistance()));
+        holder.mDistanceView.setText(String.format("%5.2f km",holder.mItem.getDistance()));
         holder.mIdView.setText(String.valueOf(mValues.get(position).getNo()));
         holder.mNameView.setText(mValues.get(position).getName());
         holder.mView.setOnClickListener(new OnSingleClickListener() {

@@ -13,6 +13,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.Context;
@@ -40,6 +41,7 @@ import com.platformeight.coffee.servertask.ServerHandle;
 import com.platformeight.coffee.service.FCMService;
 import com.platformeight.coffee.ui.login.LoginActivity;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import static com.platformeight.coffee.Constant.LOCATION_PERMISSION_REQUEST_CODE;
@@ -81,6 +83,8 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
         initialView();
         initialData();
     }
+
+
     private void initialData() {
         MyApplication.Main = this;
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
@@ -125,22 +129,30 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
                         //new ServerHandle().sendFCM(2,"coffee_shops","test message");
                         intent = new Intent(context, MemberInfoActivity.class);
                         startActivity(intent);
+                        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                         break;
                     case R.id.order_List:
                         //Toast.makeText(context, title + ": 주문 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
                         intent = new Intent(context, MyOrdersActivity.class);
                         startActivity(intent);
+                        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                         break;
                     case R.id.setting:
                         //Toast.makeText(context, title + ": 설정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
                         //TODO:: 정보수정 기기등록 페이지로 이동시킬것
                         getToken("coffee_members");
                         break;
+                    case R.id.license:
+                        intent = new Intent(context, LicenseActivity.class);
+                        startActivity(intent);
+                        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                        break;
                     case R.id.logout:
                         //Toast.makeText(context, title + ": 로그아웃 시도중", Toast.LENGTH_SHORT).show();
                         if (mLoginForm) { //로그인 및 회원가입
                             intent = new Intent(context, LoginActivity.class);
                             startActivityForResult(intent, RESULT_LOGIN);
+                            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                         } else { //로그아웃시도
                             mLoginForm = true;
                             changeLogin();
@@ -169,6 +181,7 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
         Intent intent = new Intent(this, ShopActivity.class);
         intent.putExtra(Constant.SHOP_DATA, data);
         startActivity(intent);
+        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
         //Toast.makeText(this, "event "+item.content, Toast.LENGTH_SHORT).show();
     }
     @Override
@@ -343,5 +356,10 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
     private void showMissingPermissionError() {
         PermissionUtils.PermissionDeniedDialog
                 .newInstance(true).show(getSupportFragmentManager(), "dialog");
+    }
+
+    public void refreshPoint() {
+        new ServerHandle().refresh(user.getNo());
+        nav_point.setText(""+user.getPoint());
     }
 }

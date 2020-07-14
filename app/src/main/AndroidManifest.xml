@@ -11,6 +11,13 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
 
+    <uses-feature
+        android:name="android.hardware.screen.portrait"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
+
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -25,6 +32,7 @@
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="@string/naver_map_sdk_client_id" />
+
         <receiver
             android:name=".service.AlarmReceiver"
             android:enabled="true"
@@ -33,6 +41,7 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="@string/default_notification_channel_id" />
@@ -67,13 +76,23 @@
                     android:host="coffee-20d55.firebaseapp.com"
                     android:scheme="https" />
             </intent-filter>
+            <!-- 웹뷰 및 ISP 등의 어플 인증후 앱으로 다시 호출하기 위한 스키마 설정 -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="iamporttest" />
+            </intent-filter>
+
         </activity>
         <activity android:name=".MyOrdersActivity" />
         <activity
             android:name=".ShopActivity"
             android:taskAffinity="task.order" />
         <activity
-            android:name="CustomLocationTrackingActivity"
+            android:name=".CustomLocationTrackingActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:taskAffinity="task.order" />
         <activity
@@ -82,14 +101,17 @@
         <activity
             android:name=".CartActivity"
             android:taskAffinity="task.order" />
+        <activity android:name=".PgpaymentActivity">
+
+        </activity>
         <activity
             android:name=".ui.login.LoginActivity"
             android:label="@string/title_activity_login" />
         <activity
             android:name=".ui.login.RegisterActivity"
             android:label="@string/title_activity_login" />
-        <activity android:name=".MemberInfoActivity"/>
-        <!-- [START firebase_service] -->
+        <activity android:name=".MemberInfoActivity" />
+        <activity android:name=".LicenseActivity" /> <!-- [START firebase_service] -->
         <service android:name=".service.FCMService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

@@ -9,15 +9,23 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.webkit.CookieManager;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.JsonObject;
+import com.platformeight.coffee.iamportsdk.InicisWebViewClient;
 import com.platformeight.coffee.servertask.ServerHandle;
 import com.platformeight.coffee.ui.login.LoginActivity;
 
@@ -25,11 +33,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Date;
+
 import static com.platformeight.coffee.Constant.CART_ITEMS;
 import static com.platformeight.coffee.Constant.DECIMAL_FORMAT;
 import static com.platformeight.coffee.MyApplication.Main;
 import static com.platformeight.coffee.MyApplication.mLoginForm;
 import static com.platformeight.coffee.MyApplication.user;
+
 
 public class CartActivity extends AppCompatActivity implements CartFragment.OnListFragmentInteractionListener{
 
@@ -45,7 +56,7 @@ public class CartActivity extends AppCompatActivity implements CartFragment.OnLi
     private int price;
     private Context context;
 
-    @Override
+    @SuppressLint("NewApi") @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
@@ -83,14 +94,38 @@ public class CartActivity extends AppCompatActivity implements CartFragment.OnLi
                     //js_menu.put("order_time", "2020/05/16/15:38"); //db상 처리
                     js_menu.put("detail", ja.toString());
                     // TODO:결제페이지로 토스
-                    //test
+                    /* pg 결제데이터
+
+                    Intent intent = new Intent(context, PgpaymentActivity.class);
+                    JSONObject request_pay = new JSONObject();
+                    request_pay.put("pg", "html6_inicis");                              //결제pg사
+                    request_pay.put("pay_method", "phone");                             //결제선택
+                    request_pay.put("merchant_uid", "merchant_" + new Date().getTime());    //서버상 자동생성
+                    request_pay.put("name", "주문명:결제테스트");   //주문건 menu[0].name
+                    request_pay.put("amount", 14000);               //결제금액
+                    request_pay.put("buyer_email", "iamport@siot.do");  //공란
+                    request_pay.put("buyer_name", "구매자이름");     //user.name
+                    request_pay.put("buyer_tel", "010-1234-5678");  //user.phone
+                    request_pay.put("buyer_addr", "서울특별시 강남구 삼성동"); //공란
+                    request_pay.put("buyer_postcode", "123-456");   //공란
+                    intent.putExtra("menu",js_menu.toString());
+                    startActivity(intent);
+
+
                     Log.d("", "sendOrder: "+js_menu.toString());
                     if ( new ServerHandle().sendOrder(js_menu) ){
+                        Main.refreshPoint();
                         new ServerHandle().sendFCM(shop.getNo(),"coffee_shops","주문왔습니다.");
                         finishAffinity(); //주문처리과정 일괄정리
                     } else {
                         Toast.makeText(CartActivity.this, "connection error", Toast.LENGTH_SHORT).show();
                     }
+                     */
+                    //test
+
+                    Intent intent = new Intent(context, PgpaymentActivity.class);
+                    startActivity(intent);
+                    overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
 
                 } catch (JSONException e) {
                     e.printStackTrace();

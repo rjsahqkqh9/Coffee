@@ -35,6 +35,7 @@ import static com.platformeight.coffee.Constant.REGISTER_SUCCESS;
 import static com.platformeight.coffee.Constant.member_id_check;
 import static com.platformeight.coffee.Constant.member_login;
 import static com.platformeight.coffee.Constant.member_pass_check;
+import static com.platformeight.coffee.Constant.member_refresh;
 import static com.platformeight.coffee.Constant.member_register;
 import static com.platformeight.coffee.Constant.member_update;
 import static com.platformeight.coffee.Constant.order_cancel;
@@ -118,6 +119,23 @@ public class ServerHandle {
         try {
             json.put("email", email);
             json.put("pass", pass);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        NetworkTask networkTask = new NetworkTask(url, json);
+        String result = null;
+        try {
+            result = networkTask.execute().get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return parserUser(result);
+    }
+    public String refresh(int no) { //email, pass
+        url = member_refresh;
+        json = new JSONObject();
+        try {
+            json.put("no", no);
         } catch (JSONException e) {
             e.printStackTrace();
         }

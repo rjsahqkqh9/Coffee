@@ -101,6 +101,7 @@ public class ShopActivity extends AppCompatActivity implements MenuFragment.OnLi
                 intent.putExtra(SHOP_DATA, shop);
                 intent.putExtra(CART_ITEMS, cart_list);
                 startActivityForResult(intent, RESULT_CART);
+                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
             }
         });
     }
@@ -119,6 +120,7 @@ public class ShopActivity extends AppCompatActivity implements MenuFragment.OnLi
             Intent intent = new Intent(this, CustomLocationTrackingActivity.class);
             intent.putExtra(SHOP_DATA, shop);
             startActivity(intent);
+            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
         });
 
         //TODO: shop으로 메뉴 및 정보 호출
@@ -186,6 +188,7 @@ public class ShopActivity extends AppCompatActivity implements MenuFragment.OnLi
         intent.putExtra(MENU, item.toString());
         intent.putExtra(CART_ITEMS, cart_list);
         startActivityForResult(intent, RESULT_ORDER);
+        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -200,6 +203,7 @@ public class ShopActivity extends AppCompatActivity implements MenuFragment.OnLi
                     intent.putExtra(SHOP_DATA,shop);
                     intent.putExtra(CART_ITEMS, cart_list);
                     startActivityForResult(intent, RESULT_CART);
+                    overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                 } else { //fab_cart animation
                     toggleFab();
                 }
